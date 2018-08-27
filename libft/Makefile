@@ -10,6 +10,16 @@
 #                                                                              #
 # **************************************************************************** #
 
+COLOR_OFF=\033[0m#			# Text Reset
+BLACK	=\033[0;30m#		# Black
+RED		=\033[0;31m#		# Red
+GREEN	=\033[0;32m#		# Green
+YELLOW	=\033[0;33m#		# Yellow
+BLUE	=\033[0;34m#		# Blue
+PURPLE	=\033[0;35m#		# Purple
+CYAN	=\033[0;36m#		# Cyan
+WHITE	=\033[0;37m#		# White
+
 CC=gcc 
 CFLAGS=-Wall -Werror -Wextra
 SRC=./ft_memset.c \
@@ -91,19 +101,28 @@ SRC=./ft_memset.c \
 	./write_colors.c
 OBJ=$(SRC:.c=.o)
 NAME=libft.a
+INCLUDE = libft.h
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	ar rc $(NAME) $(OBJ)
+$(NAME): $(OBJ) $(INCLUDE)
+	@ar rc $(NAME) $(OBJ)
+	@ printf "|---------------------------------|\n ✅ | $(WHITE)[$(GREEN)done$(WHITE)]$(COLOR_OFF) - libft.a\n|---------------------------------|\n"
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $< -I ./
+	@$(CC) $(CFLAGS) -o $@ -c $< -I ./
+	@ printf "$(WHITE)[$(GREEN)created$(WHITE)]$(COLOR_OFF) - $@\n"
 
 clean:
-	rm -f $(OBJ)
+	@rm -f $(OBJ)
+	@ printf "|---------------------------------|\n 🗑  | $(WHITE)[$(RED)remove$(WHITE)]$(COLOR_OFF) - objects of libft\n|---------------------------------|\n"
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
+	@ printf "|---------------------------------|\n 🗑  | $(WHITE)[$(RED)remove$(WHITE)]$(COLOR_OFF) - $(NAME)\n|---------------------------------|\n"
+
+re: fclean all
+
+.PHONY: all, clean, fclean, re
 
 re: fclean all
