@@ -14,16 +14,29 @@
 
 char	*ft_strchr(const char *s, int c)
 {
-	char	*d;
+	int				i;
+	uintmax_t		mask;
+	const uintmax_t *ptr;
 
-	d = (char *)s;
-	while (*d != '\0')
+	i = sizeof(uintmax_t);
+	ptr = (const uintmax_t *)s;
+	mask = c + 1;
+	while (i--)
+		mask = (mask << 8) + (c + 1);
+	i = -1;
+	while (1)
 	{
-		if (*d == (char)c)
-			break ;
-		d++;
+		if (((*ptr - mask) & ~(*ptr) & 0x8080808080808080L)
+			|| ((*ptr - 0x101010101010101L) & ~(*ptr) & 0x8080808080808080L))
+		{
+			s = (const char *)ptr;
+			while (s[++i] != c && s[i] != '\0')
+				;
+			if (s[i] == c)
+				return ((char *)s + i);
+			else
+				return (NULL);
+		}
+		ptr++;
 	}
-	if (*d == (char)c)
-		return (d);
-	return (NULL);
 }

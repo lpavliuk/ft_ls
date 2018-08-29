@@ -14,19 +14,28 @@
 
 char	*ft_strdup(const char *s1)
 {
-	char	*d;
-	char	*begin;
-	size_t	i;
+	char		*d;
+	char		*begin;
+	uintmax_t	*ptr_d;
+	uintmax_t	*ptr_s;
 
-	i = -1;
-	while (s1[++i] != '\0')
-		;
-	d = (char *)malloc(sizeof(char) * (i + 1));
-	begin = d;
+	d = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 1));
 	if (d == NULL)
 		return (NULL);
-	while (*s1 != '\0')
-		*d++ = *s1++;
-	*d = '\0';
-	return (begin);
+	ptr_d = (uintmax_t *)d;
+	ptr_s = (uintmax_t *)s1;
+	begin = d;
+	while (1)
+	{
+		if ((*ptr_s - 0x101010101010101L)
+			& ~(*ptr_s) & 0x8080808080808080L)
+		{
+			d = (char *)ptr_d;
+			s1 = (char *)ptr_s;
+			while ((*d++ = *s1++))
+				;
+			return (begin);
+		}
+		*ptr_d++ = *ptr_s++;
+	}
 }
