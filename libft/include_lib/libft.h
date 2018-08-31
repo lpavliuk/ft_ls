@@ -18,7 +18,6 @@
 # include <stdlib.h>
 # include <stdarg.h>
 # include <wchar.h>
-# include "libft.h"
 
 # define BUFF_SIZE 42
 

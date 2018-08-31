@@ -22,95 +22,97 @@ WHITE	=\033[0;37m#		# White
 
 CC=gcc 
 CFLAGS=-Wall -Werror -Wextra
-SRC=./ft_memset.c \
-	./ft_atoi.c \
-	./ft_bzero.c \
-	./ft_count_words.c \
-	./ft_isalnum.c \
-	./ft_isalpha.c \
-	./ft_isascii.c \
-	./ft_isdigit.c \
-	./ft_isprint.c \
-	./ft_itoa.c \
-	./ft_lstadd.c \
-	./ft_lstdel.c \
-	./ft_lstdelone.c \
-	./ft_lstiter.c \
-	./ft_lstlen.c \
-	./ft_lstmap.c \
-	./ft_lstnew.c \
-	./ft_lstprint.c \
-	./ft_memalloc.c \
-	./ft_memccpy.c \
-	./ft_memchr.c \
-	./ft_memcmp.c \
-	./ft_memcpy.c \
-	./ft_memdel.c \
-	./ft_memmove.c \
-	./ft_memset.c \
-	./ft_putchar.c \
-	./ft_putchar_fd.c \
-	./ft_putendl.c \
-	./ft_putendl_fd.c \
-	./ft_putnbr.c \
-	./ft_putnbr_fd.c \
-	./ft_putstr.c \
-	./ft_putstr_fd.c \
-	./ft_sqrt.c \
-	./ft_stralldel.c \
-	./ft_strcat.c \
-	./ft_strchr.c \
-	./ft_strclr.c \
-	./ft_strcmp.c \
-	./ft_strcpy.c \
-	./ft_strdel.c \
-	./ft_strdup.c \
-	./ft_strequ.c \
-	./ft_striter.c \
-	./ft_striteri.c \
-	./ft_strjoin.c \
-	./ft_strlcat.c \
-	./ft_strlen.c \
-	./ft_strmap.c \
-	./ft_strmapi.c \
-	./ft_strncat.c \
-	./ft_strncmp.c \
-	./ft_strncpy.c \
-	./ft_strnequ.c \
-	./ft_strnew.c \
-	./ft_strnstr.c \
-	./ft_strrchr.c \
-	./ft_strsplit.c \
-	./ft_strstr.c \
-	./ft_strsub.c \
-	./ft_strtrim.c \
-	./ft_tolower.c \
-	./ft_toupper.c \
-	./get_next_line.c \
-	./check_percent.c \
-	./ft_printf.c \
-	./ft_putnbr_base.c \
-	./write_symbol_s_uni.c \
-	./write_to_buffer.c \
-	./write_type_c.c \
-	./write_type_s.c \
-	./write_type_d_i.c \
-	./write_type_x_p.c \
-	./write_type_o.c \
-	./write_type_u.c \
-	./write_colors.c
+SRC=./src_lib/ft_memset.c \
+	./src_lib/ft_atoi.c \
+	./src_lib/ft_bzero.c \
+	./src_lib/ft_count_words.c \
+	./src_lib/ft_isalnum.c \
+	./src_lib/ft_isalpha.c \
+	./src_lib/ft_isascii.c \
+	./src_lib/ft_isdigit.c \
+	./src_lib/ft_isprint.c \
+	./src_lib/ft_itoa.c \
+	./src_lib/ft_lstadd.c \
+	./src_lib/ft_lstdel.c \
+	./src_lib/ft_lstdelone.c \
+	./src_lib/ft_lstiter.c \
+	./src_lib/ft_lstlen.c \
+	./src_lib/ft_lstmap.c \
+	./src_lib/ft_lstnew.c \
+	./src_lib/ft_lstprint.c \
+	./src_lib/ft_memalloc.c \
+	./src_lib/ft_memccpy.c \
+	./src_lib/ft_memchr.c \
+	./src_lib/ft_memcmp.c \
+	./src_lib/ft_memcpy.c \
+	./src_lib/ft_memdel.c \
+	./src_lib/ft_memmove.c \
+	./src_lib/ft_memset.c \
+	./src_lib/ft_putchar.c \
+	./src_lib/ft_putchar_fd.c \
+	./src_lib/ft_putendl.c \
+	./src_lib/ft_putendl_fd.c \
+	./src_lib/ft_putnbr.c \
+	./src_lib/ft_putnbr_fd.c \
+	./src_lib/ft_putstr.c \
+	./src_lib/ft_putstr_fd.c \
+	./src_lib/ft_sqrt.c \
+	./src_lib/ft_stralldel.c \
+	./src_lib/ft_strcat.c \
+	./src_lib/ft_strchr.c \
+	./src_lib/ft_strclr.c \
+	./src_lib/ft_strcmp.c \
+	./src_lib/ft_strcpy.c \
+	./src_lib/ft_strdel.c \
+	./src_lib/ft_strdup.c \
+	./src_lib/ft_strequ.c \
+	./src_lib/ft_striter.c \
+	./src_lib/ft_striteri.c \
+	./src_lib/ft_strjoin.c \
+	./src_lib/ft_strlcat.c \
+	./src_lib/ft_strlen.c \
+	./src_lib/ft_strmap.c \
+	./src_lib/ft_strmapi.c \
+	./src_lib/ft_strncat.c \
+	./src_lib/ft_strncmp.c \
+	./src_lib/ft_strncpy.c \
+	./src_lib/ft_strnequ.c \
+	./src_lib/ft_strnew.c \
+	./src_lib/ft_strnstr.c \
+	./src_lib/ft_strrchr.c \
+	./src_lib/ft_strsplit.c \
+	./src_lib/ft_strstr.c \
+	./src_lib/ft_strsub.c \
+	./src_lib/ft_strtrim.c \
+	./src_lib/ft_tolower.c \
+	./src_lib/ft_toupper.c \
+	./src_lib/get_next_line.c \
+	./src_lib/check_percent.c \
+	./src_lib/ft_printf.c \
+	./src_lib/ft_putnbr_base.c \
+	./src_lib/write_symbol_s_uni.c \
+	./src_lib/write_to_buffer.c \
+	./src_lib/write_type_c.c \
+	./src_lib/write_type_s.c \
+	./src_lib/write_type_d_i.c \
+	./src_lib/write_type_x_p.c \
+	./src_lib/write_type_o.c \
+	./src_lib/write_type_u.c \
+	./src_lib/write_colors.c
 OBJ=$(SRC:.c=.o)
 NAME=libft.a
-INCLUDE = libft.h
+INCLUDE=include_lib
+SRC_DIR=src_lib
+HEADER=include_lib/libft.h
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(INCLUDE)
+$(NAME): $(OBJ) $(HEADER)
 	@ar rc $(NAME) $(OBJ)
 	@ printf "|---------------------------------|\n ✅ | $(WHITE)[$(GREEN)done$(WHITE)]$(COLOR_OFF) - libft.a\n|---------------------------------|\n"
 
-%.o: %.c
-	@$(CC) $(CFLAGS) -o $@ -c $< -I ./
+$(SRC_DIR)/%.o: $(SRC_DIR)/%.c
+	@ $(CC) $(CFLAGS) -o $@ -c $< -I $(INCLUDE)
 	@ printf "$(WHITE)[$(GREEN)created$(WHITE)]$(COLOR_OFF) - $@\n"
 
 clean:
@@ -124,5 +126,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all, clean, fclean, re
-
-re: fclean all
