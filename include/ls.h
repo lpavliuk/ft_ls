@@ -14,6 +14,15 @@
 # define LS_H
 
 # include <libft.h>
+# include <dirent.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 
+typedef struct	s_ls
+{
+	DIR				*fd_dir;
+	struct dirent	*dir;
+	struct stat		*stat;
+}				t_ls;
 
 #endif
