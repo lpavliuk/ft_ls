@@ -1,1 +1,1 @@
-gcc main.c libft/libft.a -I include/ -I libft/include_lib 
+gcc -Wall -Wextra -Werror main.c src/*.c libft/libft.a -I include/ -I libft/include_lib 
