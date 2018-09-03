@@ -14,9 +14,6 @@
 
 static size_t	check(char *b, char *l)
 {
-	size_t n;
-
-	n = 0;
 	while (*b++ == *l++)
 	{
 		if (*b == '\0' && *l == '\0')
