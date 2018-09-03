@@ -43,7 +43,10 @@ void		check_mode(t_ls *ls, unsigned int mode, char *permfile)
 			ft_memcpy(&permfile[1 + n * 3], perm, 3);
 		mode >>= 3;
 	}
-	(mode & 1) ? permfile[9] = (ls->mode[9] == 'x') ? 't' : 'T' : 0;
-	(mode & 2) ? permfile[6] = (ls->mode[6] == 'x') ? 's' : 'S' : 0;
-	(mode & 4) ? permfile[3] = (ls->mode[3] == 'x') ? 's' : 'S' : 0;
+	if (mode & 1)
+		permfile[9] = (ls->mode[9] == 'x') ? 't' : 'T';
+	if (mode & 2)
+		permfile[6] = (ls->mode[6] == 'x') ? 's' : 'S';
+	if (mode & 4)
+		permfile[3] = (ls->mode[3] == 'x') ? 's' : 'S';
 }

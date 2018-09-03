@@ -26,6 +26,6 @@ typedef struct	s_ls
 	char			mode[11];
 }				t_ls;
 
-void		check_mode(t_ls *ls, unsigned int mode, char *permfile);
+void			check_mode(t_ls *ls, unsigned int mode, char *permfile);
 
 #endif
