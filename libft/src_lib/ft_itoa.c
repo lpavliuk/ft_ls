@@ -12,24 +12,6 @@
 
 #include "libft.h"
 
-size_t			ft_count(intmax_t n, short int base)
-{
-	size_t c;
-
-	if (n == -2147483648)
-		return (11);
-	if (n >= 0)
-		c = 1;
-	else if (n < 0)
-		c = 2;
-	while (n / base != 0)
-	{
-		n = n / base;
-		c++;
-	}
-	return (c);
-}
-
 static char		*ft_string(char *str, int n, size_t c)
 {
 	int		i;

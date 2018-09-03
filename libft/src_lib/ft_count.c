@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ls.h                                               :+:      :+:    :+:   */
+/*   ft_count.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: opavliuk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/08/31 19:11:45 by opavliuk          #+#    #+#             */
-/*   Updated: 2018/08/31 19:11:48 by opavliuk         ###   ########.fr       */
+/*   Created: 2018/09/03 09:24:19 by opavliuk          #+#    #+#             */
+/*   Updated: 2018/09/03 09:24:24 by opavliuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LS_H
-# define LS_H
+#include "libft.h"
 
-# include <libft.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-
-typedef struct	s_ls
+size_t			ft_count(intmax_t n, short int base)
 {
-	DIR				*fd_dir;
-	struct dirent	*dir;
-	struct stat		stat;
-	char			mode[11];
-}				t_ls;
+	size_t c;
 
-#endif
+	if (n >= 0)
+		c = 1;
+	else if (n < 0)
+		c = 2;
+	while (n / base != 0)
+	{
+		n = n / base;
+		c++;
+	}
+	return (c);
+}

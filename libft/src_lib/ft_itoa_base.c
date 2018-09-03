@@ -1,29 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ls.h                                               :+:      :+:    :+:   */
+/*   ft_itoa_base.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: opavliuk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/08/31 19:11:45 by opavliuk          #+#    #+#             */
-/*   Updated: 2018/08/31 19:11:48 by opavliuk         ###   ########.fr       */
+/*   Created: 2018/09/03 09:21:19 by opavliuk          #+#    #+#             */
+/*   Updated: 2018/09/03 09:21:21 by opavliuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LS_H
-# define LS_H
+#include "libft.h"
 
-# include <libft.h>
-# include <dirent.h>
-# include <sys/stat.h>
-# include <sys/types.h>
-
-typedef struct	s_ls
+char			*ft_itoa_base(uintmax_t n, short int base)
 {
-	DIR				*fd_dir;
-	struct dirent	*dir;
-	struct stat		stat;
-	char			mode[11];
-}				t_ls;
+	size_t	c;
+	char	*str;
+	char	*bases;
 
-#endif
+	bases = "0123456789abcdef";
+	c = ft_count(n, base);
+	str = (char *)malloc(sizeof(char) * c);
+	if (str == NULL)
+		return (NULL);
+	ft_bzero(str, c);
+	str[c] = '\0';
+	while (n > 0)
+	{
+		str[--c] = bases[n % base];
+		n /= base;
+	}
+	return (str);
+}

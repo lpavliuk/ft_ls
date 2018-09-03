@@ -25,6 +25,7 @@ CFLAGS=-Wall -Werror -Wextra
 SRC=./src_lib/ft_memset.c \
 	./src_lib/ft_atoi.c \
 	./src_lib/ft_bzero.c \
+	./src_lib/ft_count.c \
 	./src_lib/ft_count_words.c \
 	./src_lib/ft_isalnum.c \
 	./src_lib/ft_isalpha.c \
@@ -32,6 +33,7 @@ SRC=./src_lib/ft_memset.c \
 	./src_lib/ft_isdigit.c \
 	./src_lib/ft_isprint.c \
 	./src_lib/ft_itoa.c \
+	./src_lib/ft_itoa_base.c \
 	./src_lib/ft_lstadd.c \
 	./src_lib/ft_lstdel.c \
 	./src_lib/ft_lstdelone.c \
