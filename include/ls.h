@@ -17,15 +17,26 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include <sys/types.h>
+# include <time.h>
+
+typedef struct	s_info
+{
+	char			*name;
+	char			mode[11];
+	size_t			size;
+	char			time[25];
+	struct s_info	*next;
+}				t_info;
 
 typedef struct	s_ls
 {
 	DIR				*fd_dir;
 	struct dirent	*dir;
 	struct stat		stat;
-	char			mode[11];
+	size_t			total;
+	t_info			*head;
 }				t_ls;
 
-void			check_mode(t_ls *ls, unsigned int mode, char *permfile);
+void			check_mode(unsigned int mode, char *permfile);
 
 #endif
