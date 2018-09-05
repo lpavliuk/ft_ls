@@ -48,5 +48,7 @@ typedef struct	s_ls
 }				t_ls;
 
 void			check_mode(unsigned int mode, char *permfile);
+t_info			*new_file(t_info **head);
+void			free_list(t_info *head);
 
 #endif
