@@ -105,7 +105,7 @@ int		main(int argc, char **argv)
 
 		}
 		closedir(ls->fd_dir);
-		// check_head(ls->head);
+		check_head(ls->head);
 
 		free_list(ls->head);
 		
