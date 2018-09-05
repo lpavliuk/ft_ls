@@ -18,13 +18,23 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <time.h>
+# include <pwd.h>
+# include <grp.h>
 
 typedef struct	s_info
 {
 	char			*name;
 	char			mode[11];
-	size_t			size;
-	char			time[25];
+	char			data[25];
+	nlink_t			nlinks;
+	dev_t			rdev;	
+	off_t			size;
+	uid_t			uid;
+	gid_t			gid;
+	blkcnt_t		blocks;
+	size_t			atime;
+	size_t			mtime;
+	size_t			ctime;
 	struct s_info	*next;
 }				t_info;
 
