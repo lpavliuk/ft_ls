@@ -12,41 +12,40 @@
 
 #include <ls.h>
 
-static void	check_mode_dir(unsigned int *mode, char *permfile)
+static void	check_type(unsigned int *mode, char *permfile)
 {
-	if (*mode & S_IFREG)
-		*mode ^= S_IFREG;
-	else if (*mode & S_IFDIR)
-	{
+	if (S_ISDIR(*mode))
 		permfile[0] = 'd';
-		*mode ^= S_IFDIR;
-	}
+	else if (S_ISBLK(*mode))
+		permfile[0] = 'b';
+	else if (S_ISCHR(*mode))
+		permfile[0] = 'c';
+	else if (S_ISLNK(*mode))
+		permfile[0] = 'l';
+	else if (S_ISFIFO(*mode))
+		permfile[0] = 'p';
+	else if (S_ISSOCK(*mode))
+		permfile[0] = 'c';
+	else
+		permfile[0] = '-';
 }
 
 void		check_mode(unsigned int mode, char *permfile)
 {
-	int			n;
-	char		*perm;
-
-	n = 3;
-	ft_strcpy(permfile, "---------");
-	check_mode_dir(&mode, permfile);
-	while (--n >= 0)
-	{
-		if ((((mode & 7) == 7) && (perm = "rwx"))
-		|| (((mode & 6) == 6) && (perm = "rw-"))
-		|| (((mode & 5) == 5) && (perm = "r-x"))
-		|| (((mode & 3) == 3) && (perm = "-wx"))
-		|| ((mode & 4) && (perm = "r--"))
-		|| ((mode & 2) && (perm = "-w-"))
-		|| ((mode & 1) && (perm = "--x")))
-			ft_memcpy(&permfile[1 + n * 3], perm, 3);
-		mode >>= 3;
-	}
-	if (mode & 1)
-		permfile[9] = (permfile[9] == 'x') ? 't' : 'T';
-	if (mode & 2)
-		permfile[6] = (permfile[6] == 'x') ? 's' : 'S';
-	if (mode & 4)
-		permfile[3] = (permfile[3] == 'x') ? 's' : 'S';
+	check_type(&mode, permfile);
+	permfile[1] = (mode & S_IRUSR) ? 'r' : '-';
+	permfile[2] = (mode & S_IWUSR) ? 'w' : '-';
+	permfile[3] = (mode & S_IXUSR) ? 'x' : '-';
+	permfile[4] = (mode & S_IRGRP) ? 'r' : '-';
+	permfile[5] = (mode & S_IWGRP) ? 'w' : '-';
+	permfile[6] = (mode & S_IXGRP) ? 'x' : '-';
+	permfile[7] = (mode & S_IROTH) ? 'r' : '-';
+	permfile[8] = (mode & S_IWOTH) ? 'w' : '-';
+	permfile[9] = (mode & S_IXOTH) ? 'x' : '-';
+	if (mode & S_ISUID)
+		permfile[3] = (mode & S_IXUSR) ? 's' : 'S';
+	if (mode & S_ISGID)
+		permfile[6] = (mode & S_IXGRP) ? 's' : 'l';
+	if (mode & S_ISVTX)
+		permfile[9] = (mode & S_IXOTH) ? 't' : 'T';
 }

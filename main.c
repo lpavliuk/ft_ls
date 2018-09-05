@@ -80,7 +80,7 @@ int		main(int argc, char **argv)
 			
 			ft_strncpy(&file->time[0], ctime(&ls->stat.st_ctime), 24);
 
-			ft_printf("file->time:[{yellow}  %s {eoc}]\n", file->time);
+			ft_printf("file->time:[{yellow}  %s  {eoc}]\n", file->time);
 
 			ls->total += ls->stat.st_blocks;
 			ft_bzero(&ls->stat, sizeof(ls->stat));
