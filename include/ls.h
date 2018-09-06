@@ -48,6 +48,7 @@ typedef struct	s_ls
 }				t_ls;
 
 void			check_mode(unsigned int mode, char *permfile);
+char	        *ft_strjoin_dir(char const *s1, char const *s2);
 t_info			*new_file(t_info **head);
 void			free_list(t_info *head);
 

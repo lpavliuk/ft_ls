@@ -12,7 +12,7 @@
 
 #include "../include/ls.h"
 
-static inline void	check_type(unsigned int *mode, char *permfile)
+static inline void	check_type(const unsigned int *mode, char *permfile)
 {
 	if (S_ISDIR(*mode))
 		permfile[0] = 'd';
@@ -30,7 +30,7 @@ static inline void	check_type(unsigned int *mode, char *permfile)
 		permfile[0] = '-';
 }
 
-void				check_mode(unsigned int mode, char *permfile)
+void				check_mode(const unsigned int mode, char *permfile)
 {
 	check_type(&mode, permfile);
 	permfile[1] = (char)((mode & S_IRUSR) ? 'r' : '-');

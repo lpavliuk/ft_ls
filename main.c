@@ -1,5 +1,4 @@
 /* ************************************************************************** */
-/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -41,12 +40,16 @@ void	check_head(t_info *head)
 /*****************************************************
 ******************************************************/
 
+//void	read_info(t_ls *ls)
+//{
+//
+//}
+
 int		main(int argc, char **argv)
 {
 	t_ls *ls;
 	t_info *file;
 	char *pwd;
-	char *tmp;
 
 	ls = (t_ls *)malloc(sizeof(t_ls));
 	ft_bzero(ls, sizeof(*ls));
@@ -61,10 +64,7 @@ int		main(int argc, char **argv)
 			file = new_file(&ls->head);
 			file->name = ft_strdup(ls->dir->d_name);			
 			
-			pwd = ft_strjoin(argv[1], "/");
-			tmp = pwd;
-			pwd = ft_strjoin(pwd, ls->dir->d_name);
-			free(tmp);
+			pwd = ft_strjoin_dir(argv[1], ls->dir->d_name);
 			lstat(pwd, &ls->stat);
 			free(pwd);
 			ft_printf("rdev: %lld\n", ls->stat.st_rdev);			
@@ -79,7 +79,7 @@ int		main(int argc, char **argv)
 			ft_printf("major: %d\n", major(file->rdev));
 			ft_printf("minor: %d\n", minor(file->rdev));
 			ft_printf("mode: %lld\n", ls->stat.st_mode);
-			ft_printf("mode [octal]: %s\n", ft_itoa_base(ls->stat.st_mode, 8));
+//			ft_printf("mode [octal]: %s\n", ft_itoa_base(ls->stat.st_mode, 8));
  
 			ft_printf("size: %d\n", ls->stat.st_size);
 						
@@ -106,7 +106,7 @@ int		main(int argc, char **argv)
 
 		}
 		closedir(ls->fd_dir);
-		check_head(ls->head);
+//		check_head(ls->head);
 
 		free_list(ls->head);
 		
@@ -115,6 +115,6 @@ int		main(int argc, char **argv)
 	}
 	else
 		ft_printf("OK!\n");
-	// system("leaks a.out");
+	 system("leaks a.out");
 	return (0);
 }
