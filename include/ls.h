@@ -13,13 +13,13 @@
 #ifndef LS_H
 # define LS_H
 
-# include <libft.h>
 # include <dirent.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <time.h>
 # include <pwd.h>
 # include <grp.h>
+# include "../libft/include_lib/libft.h"
 
 typedef struct	s_info
 {

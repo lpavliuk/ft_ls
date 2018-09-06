@@ -1,4 +1,5 @@
 /* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -10,7 +11,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ls.h>
+#include "include/ls.h"
 
 /**************** CHECK LS->HEAD **********************/
 void	check_head(t_info *head)
@@ -94,9 +95,9 @@ int		main(int argc, char **argv)
 			ft_printf("mtime: %s", ctime(&ls->stat.st_mtime));
 			ft_printf("ctime: |%lld| - |%.24s|\n", ls->stat.st_ctime, ctime(&ls->stat.st_ctime));
 
-			file->atime = ls->stat.st_atime;
-			file->mtime = ls->stat.st_mtime;
-			file->ctime = ls->stat.st_ctime;
+			file->atime = (size_t)ls->stat.st_atime;
+			file->mtime = (size_t)ls->stat.st_mtime;
+			file->ctime = (size_t)ls->stat.st_ctime;
 			
 			ft_strncpy(&file->data[0], ctime(&ls->stat.st_ctime), 24);
 

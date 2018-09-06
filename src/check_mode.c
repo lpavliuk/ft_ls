@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ls.h>
+#include "../include/ls.h"
 
 static inline void	check_type(unsigned int *mode, char *permfile)
 {
@@ -33,19 +33,19 @@ static inline void	check_type(unsigned int *mode, char *permfile)
 void				check_mode(unsigned int mode, char *permfile)
 {
 	check_type(&mode, permfile);
-	permfile[1] = (mode & S_IRUSR) ? 'r' : '-';
-	permfile[2] = (mode & S_IWUSR) ? 'w' : '-';
-	permfile[3] = (mode & S_IXUSR) ? 'x' : '-';
-	permfile[4] = (mode & S_IRGRP) ? 'r' : '-';
-	permfile[5] = (mode & S_IWGRP) ? 'w' : '-';
-	permfile[6] = (mode & S_IXGRP) ? 'x' : '-';
-	permfile[7] = (mode & S_IROTH) ? 'r' : '-';
-	permfile[8] = (mode & S_IWOTH) ? 'w' : '-';
-	permfile[9] = (mode & S_IXOTH) ? 'x' : '-';
+	permfile[1] = (char)((mode & S_IRUSR) ? 'r' : '-');
+	permfile[2] = (char)((mode & S_IWUSR) ? 'w' : '-');
+	permfile[3] = (char)((mode & S_IXUSR) ? 'x' : '-');
+	permfile[4] = (char)((mode & S_IRGRP) ? 'r' : '-');
+	permfile[5] = (char)((mode & S_IWGRP) ? 'w' : '-');
+	permfile[6] = (char)((mode & S_IXGRP) ? 'x' : '-');
+	permfile[7] = (char)((mode & S_IROTH) ? 'r' : '-');
+	permfile[8] = (char)((mode & S_IWOTH) ? 'w' : '-');
+	permfile[9] = (char)((mode & S_IXOTH) ? 'x' : '-');
 	if (mode & S_ISUID)
-		permfile[3] = (mode & S_IXUSR) ? 's' : 'S';
+		permfile[3] = (char)((mode & S_IXUSR) ? 's' : 'S');
 	if (mode & S_ISGID)
-		permfile[6] = (mode & S_IXGRP) ? 's' : 'l';
+		permfile[6] = (char)((mode & S_IXGRP) ? 's' : 'l');
 	if (mode & S_ISVTX)
-		permfile[9] = (mode & S_IXOTH) ? 't' : 'T';
+		permfile[9] = (char)((mode & S_IXOTH) ? 't' : 'T');
 }
