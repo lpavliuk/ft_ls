@@ -48,4 +48,5 @@ void				check_mode(const unsigned int mode, char *permfile)
 		permfile[6] = (char)((mode & S_IXGRP) ? 's' : 'l');
 	if (mode & S_ISVTX)
 		permfile[9] = (char)((mode & S_IXOTH) ? 't' : 'T');
+//    check_acl(); // for + or @ !!!
 }

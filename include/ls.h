@@ -24,7 +24,7 @@
 typedef struct	s_info
 {
 	char			*name;
-	char			mode[11];
+	char			mode[12];
 	char			data[25];
 	nlink_t			nlinks;
 	dev_t			rdev;	
