@@ -25,7 +25,7 @@ static inline void	read_file_info(t_ls *ls, t_info *file)
 	file->mtime = (size_t)ls->stat.st_mtime;
 	file->ctime = (size_t)ls->stat.st_ctime;
 	ft_strncpy(&file->data[0], ctime(&ls->stat.st_ctime), 24);
-	check_mode(ls->stat.st_mode, &file->mode[0]);
+	check_mode(file, ls->stat.st_mode, &file->mode[0]);
 }
 
 void				read_dir_info(t_ls *ls, const char *dir_name)

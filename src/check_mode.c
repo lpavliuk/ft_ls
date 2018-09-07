@@ -12,6 +12,25 @@
 
 #include "../include/ls.h"
 
+static inline void	check_acl_and_xattr(t_info *file, char *permfile)
+{
+	acl_t		acl;
+	acl_entry_t	buf;
+
+	acl = acl_get_link_np(file->name_file, ACL_TYPE_EXTENDED);
+	if (listxattr(file->pwd, NULL, 0, 0) > 0)
+		permfile[10] = '@';
+	else if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &buf) == -1)
+		acl_free(acl);
+	else if (acl != NULL)
+	{
+		permfile[10] = '+';
+		acl_free(acl);
+	}
+	else
+		permfile[10] = ' ';
+}
+
 static inline void	check_type(const unsigned int *mode, char *permfile)
 {
 	if (S_ISDIR(*mode))
@@ -30,9 +49,9 @@ static inline void	check_type(const unsigned int *mode, char *permfile)
 		permfile[0] = '-';
 }
 
-void				check_mode(const unsigned int mode, char *permfile)
+void				check_mode(t_info *file, unsigned int mode, char *permfile)
 {
-	check_type(&mode, permfile);
+	check_type((const unsigned int *)&mode, permfile);
 	permfile[1] = (char)((mode & S_IRUSR) ? 'r' : '-');
 	permfile[2] = (char)((mode & S_IWUSR) ? 'w' : '-');
 	permfile[3] = (char)((mode & S_IXUSR) ? 'x' : '-');
@@ -48,5 +67,5 @@ void				check_mode(const unsigned int mode, char *permfile)
 		permfile[6] = (char)((mode & S_IXGRP) ? 's' : 'l');
 	if (mode & S_ISVTX)
 		permfile[9] = (char)((mode & S_IXOTH) ? 't' : 'T');
-//    check_acl(); // for + or @ !!!
+    check_acl_and_xattr(file, permfile); // for + or @ !!!
 }
