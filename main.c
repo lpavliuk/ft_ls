@@ -25,7 +25,7 @@ void	check_head(t_info *head)
 		ft_printf("===============================================\n");
         ft_printf("file->rdev:[{white}   %u   {eoc}]\n", head->rdev);
 		ft_printf("file->blocks:[{pink}   %u   {eoc}]\n", head->blocks);
-		ft_printf("file->name:[{green}  %s   {eoc}]\n", head->name);
+		ft_printf("file->name:[{green}  %s   {eoc}]\n", head->name_file);
 		ft_printf("file->mode:[{blue}   %s  {eoc}]\n", head->mode);
 		ft_printf("file->nlinks:[{white}   %u   {eoc}]\n", head->nlinks);
 		ft_printf("file->uid:[{white}   %u   {eoc}]\n", head->uid);
@@ -47,13 +47,14 @@ void	read_dir_info(t_ls *ls, const char *dir_name)
 	char    *pwd;
 
 	dir = new_dir(&ls->dirs, dir_name);
+
 	ls->fd_dir = opendir(dir_name);
 	while ((ls->file = readdir(ls->fd_dir)))
     {
 		file = new_file(&dir->head);
-		file->name_file = ft_strdup(ls->file->d_name);
 
-		pwd = ft_strjoin_dir(dir, file->name_file);
+		file->name_file = ft_strdup(ls->file->d_name);
+		pwd = ft_strjoin_dir(dir_name, file->name_file);
 		lstat(pwd, &ls->stat);
 		free(pwd);
 
@@ -72,7 +73,7 @@ void	read_dir_info(t_ls *ls, const char *dir_name)
 
 		ft_strncpy(&file->data[0], ctime(&ls->stat.st_ctime), 24);
 
-		ls->total += ls->stat.st_blocks;
+		dir->total += ls->stat.st_blocks;
 		ft_bzero(&ls->stat, sizeof(ls->stat));
 	}
 	closedir(ls->fd_dir);
@@ -81,23 +82,28 @@ void	read_dir_info(t_ls *ls, const char *dir_name)
 int		main(int argc, char **argv)
 {
 	t_ls *ls;
+	t_dir	*tmp;
 
 	ls = (t_ls *)malloc(sizeof(t_ls));
 	ft_bzero(ls, sizeof(*ls));
 	if (argc > 1)
-		read_dir_info(ls, argv[1]);
+	{
+		while (--argc > 0)
+			read_dir_info(ls, argv[argc]);
+	}
 	else
 		read_dir_info(ls, ".");
+	tmp = ls->dirs;
 	while (ls->dirs)
 	{
+		ft_printf("{blue}   %s: {eoc}\n", ls->dirs->name);
+		ft_printf("=========================\n");
+		ft_printf("ls->total:[{green}  %u  {eoc}]\n", ls->dirs->total);
 		check_head(ls->dirs->head);
 		ls->dirs = ls->dirs->next;
 	}
 
-	free_list(ls->dirs);
-
-	ft_printf("=========================\n");
-	ft_printf("ls->total:[{green}  %u  {eoc}]\n", ls->total);
-//	 system("leaks a.out");
+	free_lists(tmp);
+	 system("leaks a.out");
 	return (0);
 }

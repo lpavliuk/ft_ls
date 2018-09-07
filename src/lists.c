@@ -12,12 +12,21 @@
 
 #include "../include/ls.h"
 
-void	free_list(t_dir *head)
+void	free_lists(t_dir *list)
 {
-	while (head)
+	t_info *tmp;
+
+	while (list)
 	{
-		free(head->name);
-		head = head->next;
+		while (list->head)
+		{
+			tmp = list->head;
+			free(list->head->name_file);
+			list->head = list->head->next;
+			free(tmp);
+		}
+		free(list->name);
+		list = list->next;
 	}
 }
 

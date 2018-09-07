@@ -58,6 +58,6 @@ void			check_mode(unsigned int mode, char *permfile);
 char			*ft_strjoin_dir(char const *s1, char const *s2);
 t_info			*new_file(t_info **head);
 t_dir			*new_dir(t_dir **dir, const char *name);
-void			free_list(t_dir *head);
+void			free_lists(t_dir *head);
 
 #endif
