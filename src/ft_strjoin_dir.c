@@ -14,8 +14,8 @@
 
 char	*ft_strjoin_dir(char const *s1, char const *s2)
 {
-    char		*d;
-    char		*begin;
+    char    *d;
+    char    *begin;
 
     if (s1 == NULL || s2 == NULL)
         return (NULL);

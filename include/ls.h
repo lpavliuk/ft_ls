@@ -24,6 +24,7 @@
 typedef struct	s_info
 {
 	char			*name_file;
+	char 			*pwd;
 	char			mode[12];
 	char			data[25];
 	nlink_t			nlinks;
@@ -56,6 +57,7 @@ typedef struct	s_ls
 
 void			check_mode(unsigned int mode, char *permfile);
 char			*ft_strjoin_dir(char const *s1, char const *s2);
+void			read_dir_info(t_ls *ls, const char *dir_name);
 t_info			*new_file(t_info **head);
 t_dir			*new_dir(t_dir **dir, const char *name);
 void			free_lists(t_dir *head);

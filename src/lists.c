@@ -22,6 +22,7 @@ void	free_lists(t_dir *list)
 		{
 			tmp = list->head;
 			free(list->head->name_file);
+			free(list->head->pwd);
 			list->head = list->head->next;
 			free(tmp);
 		}
