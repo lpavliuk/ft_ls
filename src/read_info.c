@@ -34,7 +34,8 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 	t_info	*file;
 
 	dir = new_dir(&ls->dirs, dir_name);
-	ls->fd_dir = opendir(dir_name);
+	if (!(ls->fd_dir = opendir(dir_name)))
+		return ;
 	while ((ls->file = readdir(ls->fd_dir)))
 	{
 		file = new_file(&dir->head);

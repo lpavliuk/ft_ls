@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <zconf.h>
 #include "include/ls.h"
 
 /**************** CHECK LS->HEAD **********************/
@@ -41,6 +40,37 @@ void	check_head(t_info *head)
 /*****************************************************
 ******************************************************/
 
+void	ft_usage(const char flag)
+{
+	ft_printf("ls: illegal option -- %c\n", flag);
+	ft_putendl("usage: ls [-laRrtnGd] [file ...]");
+	exit(0);
+}
+
+void	check_flags(t_ls *ls, const char *flag)
+{
+	while (*flag++ != '\0')
+	{
+		if (*flag == 'l')
+			ls->flag |= 1;
+		else if (*flag == 'a')
+			ls->flag |= 2;
+		else if (*flag == 'R')
+			ls->flag |= 4;
+		else if (*flag == 'r')
+			ls->flag |= 8;
+		else if (*flag == 't')
+			ls->flag |= 16;
+		else if (*flag == 'n')
+			ls->flag |= 32;
+		else if (*flag == 'G')
+			ls->flag |= 64;
+		else if (*flag == 'd')
+			ls->flag |= 128;
+		else if (*flag != '\0')
+			ft_usage(*flag);
+	}
+}
 
 int		main(int argc, char **argv)
 {
@@ -49,6 +79,8 @@ int		main(int argc, char **argv)
 
 	ls = (t_ls *)malloc(sizeof(t_ls));
 	ft_bzero(ls, sizeof(*ls));
+	if (argc > 1 && argv[1][0] == '-' && argc--)
+		check_flags(ls, argv[1]);
 	if (argc > 1)
 	{
 		while (--argc > 0)

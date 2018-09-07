@@ -52,6 +52,7 @@ typedef struct	s_ls
 	DIR				*fd_dir;
 	struct dirent	*file;
 	struct stat		stat;
+	unsigned char 	flag;
 	t_dir			*dirs;
 }				t_ls;
 
