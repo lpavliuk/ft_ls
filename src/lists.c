@@ -12,12 +12,35 @@
 
 #include "../include/ls.h"
 
-void	free_list(t_info *head)
+void	free_list(t_dir *head)
 {
 	while (head)
 	{
 		free(head->name);
 		head = head->next;
+	}
+}
+
+t_dir	*new_dir(t_dir **dir, const char *name)
+{
+	t_dir *new;
+
+	new = *dir;
+	if (!(*dir))
+	{
+		*dir = (t_dir *)malloc(sizeof(t_dir));
+		ft_bzero(*dir, sizeof(t_dir));
+		(*dir)->name = ft_strdup(name);
+		return (*dir);
+	}
+	else
+	{
+		while (new->next)
+			new = new->next;
+		new->next = (t_dir *)malloc(sizeof(t_dir));
+		ft_bzero(new->next, sizeof(t_dir));
+		new->next->name = ft_strdup(name);
+		return (new->next);
 	}
 }
 

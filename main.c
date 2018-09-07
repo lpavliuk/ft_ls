@@ -40,40 +40,42 @@ void	check_head(t_info *head)
 /*****************************************************
 ******************************************************/
 
-void	read_dir_info(t_ls *ls, const char *dir)
+void	read_dir_info(t_ls *ls, const char *dir_name)
 {
-    t_info  *file;
-    char    *pwd;
+	t_dir	*dir;
+	t_info  *file;
+	char    *pwd;
 
-    ls->fd_dir = opendir(dir);
-    while ((ls->dir = readdir(ls->fd_dir)))
+	dir = new_dir(&ls->dirs, dir_name);
+	ls->fd_dir = opendir(dir_name);
+	while ((ls->file = readdir(ls->fd_dir)))
     {
-        file = new_file(&ls->head);
-        file->name = ft_strdup(ls->dir->d_name);
+		file = new_file(&dir->head);
+		file->name_file = ft_strdup(ls->file->d_name);
 
-        pwd = ft_strjoin_dir(dir, file->name);
-        lstat(pwd, &ls->stat);
-        free(pwd);
+		pwd = ft_strjoin_dir(dir, file->name_file);
+		lstat(pwd, &ls->stat);
+		free(pwd);
 
-        file->nlinks = ls->stat.st_nlink;
-        file->uid = ls->stat.st_uid;
-        file->gid = ls->stat.st_gid;
-        file->rdev = ls->stat.st_rdev;
-        file->blocks = ls->stat.st_blocks;
-        file->size = ls->stat.st_size;
+		file->nlinks = ls->stat.st_nlink;
+		file->uid = ls->stat.st_uid;
+		file->gid = ls->stat.st_gid;
+		file->rdev = ls->stat.st_rdev;
+		file->blocks = ls->stat.st_blocks;
+		file->size = ls->stat.st_size;
 
-        check_mode(ls->stat.st_mode, &file->mode[0]); // ONLY for flags -l and -n !!!
+		check_mode(ls->stat.st_mode, &file->mode[0]); // ONLY for flags -l and -n !!!
 
-        file->atime = (size_t)ls->stat.st_atime;
-        file->mtime = (size_t)ls->stat.st_mtime;
-        file->ctime = (size_t)ls->stat.st_ctime;
+		file->atime = (size_t)ls->stat.st_atime;
+		file->mtime = (size_t)ls->stat.st_mtime;
+		file->ctime = (size_t)ls->stat.st_ctime;
 
-        ft_strncpy(&file->data[0], ctime(&ls->stat.st_ctime), 24);
+		ft_strncpy(&file->data[0], ctime(&ls->stat.st_ctime), 24);
 
-        ls->total += ls->stat.st_blocks;
-        ft_bzero(&ls->stat, sizeof(ls->stat));
-    }
-    closedir(ls->fd_dir);
+		ls->total += ls->stat.st_blocks;
+		ft_bzero(&ls->stat, sizeof(ls->stat));
+	}
+	closedir(ls->fd_dir);
 }
 
 int		main(int argc, char **argv)
@@ -83,17 +85,19 @@ int		main(int argc, char **argv)
 	ls = (t_ls *)malloc(sizeof(t_ls));
 	ft_bzero(ls, sizeof(*ls));
 	if (argc > 1)
-	{
 		read_dir_info(ls, argv[1]);
-		check_head(ls->head);
-
-		free_list(ls->head);
-		
-		ft_printf("=========================\n");
-		ft_printf("ls->total:[{green}  %u  {eoc}]\n", ls->total);
-	}
 	else
-		ft_printf("OK!\n");
+		read_dir_info(ls, ".");
+	while (ls->dirs)
+	{
+		check_head(ls->dirs->head);
+		ls->dirs = ls->dirs->next;
+	}
+
+	free_list(ls->dirs);
+
+	ft_printf("=========================\n");
+	ft_printf("ls->total:[{green}  %u  {eoc}]\n", ls->total);
 //	 system("leaks a.out");
 	return (0);
 }
