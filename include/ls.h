@@ -47,7 +47,6 @@ typedef struct	s_info
 	size_t			atime;
 	size_t			mtime;
 	size_t			ctime;
-	short int 		list_xattr;
 	struct s_info	*next;
 }				t_info;
 
@@ -56,6 +55,7 @@ typedef struct	s_dir
 	char 			*name;
 	size_t			total;
 	t_info			*head;
+	t_info			*last_file;
 	struct s_dir	*next;
 }				t_dir;
 
@@ -66,14 +66,15 @@ typedef struct	s_ls
 	struct stat		stat;
 	unsigned char 	flag;
 	t_dir			*dirs;
+	t_dir			*last_dir;
 }				t_ls;
 
 void			check_mode(t_info *file, unsigned int mode, char *permfile);
 void			check_flags(t_ls *ls, const char *flag);
 char			*ft_strjoin_dir(char const *s1, char const *s2);
 void			read_dir_info(t_ls *ls, const char *dir_name);
-t_info			*new_file(t_info **head);
-t_dir			*new_dir(t_dir **dir, const char *name);
+t_info			*new_file(t_dir *dir);
+t_dir			*new_dir(t_ls *ls, const char *name);
 void			free_lists(t_dir *head);
 
 #endif

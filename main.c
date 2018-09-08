@@ -40,6 +40,18 @@ void	check_head(t_info *head)
 /*****************************************************
 ******************************************************/
 
+
+
+//void	sort_lists(t_ls *ls)
+//{
+//	if (ls->flag & FLAG_RR)
+//		sort_desc();
+//	else if (ls->flag & FLAG_T)
+//		sort_time();
+//	else
+//		sort_asc();
+//}
+
 int		main(int argc, char **argv)
 {
 	t_ls *ls;
@@ -56,6 +68,11 @@ int		main(int argc, char **argv)
 	}
 	else
 		read_dir_info(ls, ".");
+
+//	sort_lists(ls);
+
+//	output(ls);
+
 	tmp = ls->dirs;
 	while (ls->dirs)
 	{
@@ -67,6 +84,6 @@ int		main(int argc, char **argv)
 	}
 
 	free_lists(tmp);
-	system("leaks a.out");
+//	system("leaks a.out");
 	return (0);
 }

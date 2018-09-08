@@ -33,15 +33,16 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 	t_dir	*dir;
 	t_info	*file;
 
-	dir = new_dir(&ls->dirs, dir_name);
+	dir = new_dir(ls, dir_name);
 	if (!(ls->fd_dir = opendir(dir_name)))
 		return ;
 	while ((ls->file = readdir(ls->fd_dir)))
 	{
-		file = new_file(&dir->head);
+		file = new_file(dir);
 		file->name_file = ft_strdup(ls->file->d_name);
 		file->pwd = ft_strjoin_dir(dir_name, file->name_file);
-		read_file_info(ls, file); // ONLY for flags -l and -n !!!
+		if (ls->flag & FLAG_L || ls->flag & FLAG_N)
+			read_file_info(ls, file);
 		dir->total += ls->stat.st_blocks;
 		ft_bzero(&ls->stat, sizeof(ls->stat));
 	}

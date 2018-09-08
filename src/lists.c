@@ -31,46 +31,40 @@ void	free_lists(t_dir *list)
 	}
 }
 
-t_dir	*new_dir(t_dir **dir, const char *name)
+t_dir	*new_dir(t_ls *ls, const char *name)
 {
-	t_dir *new;
-
-	new = *dir;
-	if (!(*dir))
+	if (!ls->dirs)
 	{
-		*dir = (t_dir *)malloc(sizeof(t_dir));
-		ft_bzero(*dir, sizeof(t_dir));
-		(*dir)->name = ft_strdup(name);
-		return (*dir);
+		ls->dirs = (t_dir *)malloc(sizeof(t_dir));
+		ft_bzero(ls->dirs, sizeof(t_dir));
+		(ls->dirs)->name = ft_strdup(name);
+		ls->last_dir = ls->dirs;
+		return (ls->dirs);
 	}
 	else
 	{
-		while (new->next)
-			new = new->next;
-		new->next = (t_dir *)malloc(sizeof(t_dir));
-		ft_bzero(new->next, sizeof(t_dir));
-		new->next->name = ft_strdup(name);
-		return (new->next);
+		ls->last_dir->next = (t_dir *)malloc(sizeof(t_dir));
+		ft_bzero(ls->last_dir->next, sizeof(t_dir));
+		ls->last_dir->next->name = ft_strdup(name);
+		ls->last_dir = ls->last_dir->next;
+		return (ls->last_dir);
 	}
 }
 
-t_info	*new_file(t_info **head)
+t_info	*new_file(t_dir *dir)
 {
-	t_info *new;
-
-	new = *head;
-	if (!(*head))
+	if (!dir->head)
 	{
-		*head = (t_info *)malloc(sizeof(t_info));
-		ft_bzero(*head, sizeof(t_info));
-		return (*head);
+		dir->head = (t_info *)malloc(sizeof(t_info));
+		ft_bzero(dir->head, sizeof(t_info));
+		dir->last_file = dir->head;
+		return (dir->head);
 	}
 	else
 	{
-		while (new->next)
-			new = new->next;
-		new->next = (t_info *)malloc(sizeof(t_info));
-		ft_bzero(new->next, sizeof(t_info));
-		return (new->next);
+		dir->last_file->next = (t_info *)malloc(sizeof(t_info));
+		ft_bzero(dir->last_file->next, sizeof(t_info));
+		dir->last_file = dir->last_file->next;
+		return (dir->last_file);
 	}
 }
