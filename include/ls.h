@@ -48,6 +48,7 @@ typedef struct	s_info
 	size_t			mtime;
 	size_t			ctime;
 	struct s_info	*next;
+	struct s_info	*prev;
 }				t_info;
 
 typedef struct	s_dir
@@ -57,6 +58,7 @@ typedef struct	s_dir
 	t_info			*head;
 	t_info			*last_file;
 	struct s_dir	*next;
+	struct s_dir	*prev;
 }				t_dir;
 
 typedef struct	s_ls
