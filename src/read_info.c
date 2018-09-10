@@ -32,7 +32,7 @@ static inline void	find_link(t_info *file)
 	free(buf);
 }
 
-static inline void	read_file_info(t_ls *ls, t_info *file)
+void	read_file_info(t_ls *ls, t_info *file)
 {
 	lstat(file->pwd, &ls->stat);
 	file->nlinks = ls->stat.st_nlink;
@@ -56,8 +56,11 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 	t_info	*file;
 
 	dir = new_dir(ls, dir_name);
-	if (!(ls->fd_dir = opendir(dir_name)))
+	if ((ls->fd_dir = opendir(dir_name)) <= 0)
+	{
+		ft_printf("%s:\nls: %s: Permission denied\n", dir_name, dir_name);
 		return ;
+	}
 	while ((ls->file = readdir(ls->fd_dir)))
 	{
 		if (!(ls->flag & FLAG_A) && ls->file->d_name[0] == '.')

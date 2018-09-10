@@ -41,12 +41,24 @@ void	check_head(t_info *head)
 /*****************************************************
 ******************************************************/
 
-void	sort_lists(t_ls *ls)
+void	check_file_or_dir(t_ls *ls, char *argv)
 {
-	if (ls->flag & FLAG_T)
-		sort_list_btime(ls->dirs, ls->dirs->head, ls->dirs->last_file->prev);
+	t_info *file;
+
+	if (lstat(argv, &ls->stat) < 0)
+		ft_printf("ls: %s: No such file or directory\n");
 	else
-		sort_list_bname(ls->dirs, ls->dirs->head, ls->dirs->last_file->prev);
+	{
+		if (S_ISDIR(ls->stat.st_mode))
+			read_dir_info(ls, argv);
+		else
+		{
+			file = new_file(ls->files);
+			file->name_file = ft_strdup(argv);
+			read_file_info(ls, file);
+			ft_bzero(&ls->stat, sizeof(ls->stat));
+		}
+	}
 }
 
 int		main(int argc, char **argv)
@@ -58,16 +70,19 @@ int		main(int argc, char **argv)
 	i = 0;
 	ls = (t_ls *)malloc(sizeof(t_ls));
 	ft_bzero(ls, sizeof(t_ls));
+	ls->files = (t_dir *)malloc(sizeof(t_dir));
+	ft_bzero(ls->files, sizeof(t_dir));
 	if (argc > 1 && argv[1][0] == '-' && ++i)
 		check_flags(ls, argv[1]);
 	if ((argc > 1 && !ls->flag) || (argc > 2 && ls->flag))
 	{
 		while (++i < argc)
-			read_dir_info(ls, argv[i]);
+			check_file_or_dir(ls, argv[i]);
 	}
 	else
 		read_dir_info(ls, ".");
 
+//	ft_printf("ok1\n");
 	tmp = ls->dirs;
 	while (tmp)
 	{
@@ -79,8 +94,21 @@ int		main(int argc, char **argv)
 	}
 //
 	ft_printf("======> SORT!!! <======\n");
-	if (ls->dirs->head)
-		sort_lists(ls);
+	if (ls->files && ls->files->head)
+		sort_lists(ls, ls->files);
+	if (ls->dirs && ls->dirs->head)
+		sort_lists(ls, ls->dirs);
+
+	tmp = ls->files;
+	while (tmp)
+	{
+		while (tmp->head)
+		{
+			ft_printf("file->name:[{green}  %s   {eoc}]\n", tmp->head->name_file);
+			tmp->head = tmp->head->next;
+
+		tmp = tmp->next;
+	}
 
 	tmp = ls->dirs;
 	while (tmp)

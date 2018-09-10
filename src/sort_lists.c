@@ -22,22 +22,22 @@ static inline void	swap_elem(t_info *a, t_info *b)
 	a->prev = b;
 }
 
-void				sort_list_btime(t_dir *dir, t_info *first, t_info *last)
+static inline void	sort_list_btime(t_dir *dir, t_info *first, t_info *last)
 {
 	while (first->next && last->prev)
 	{
-		if (((first->ctime > first->next->ctime) ||
+		if ((first->ctime > first->next->ctime) ||
 			((first->ctime == first->next->ctime)
-			&& (ft_strcmp(first->name_file, first->next->name_file) < 0))))
+			&& (ft_strcmp(first->name_file, first->next->name_file) < 0)))
 		{
 			(&dir->head->size == &first->size) ? dir->head = first->next : 0;
 			swap_elem(first, first->next);
 			first = dir->head;
 			continue ;
 		}
-		if (((last->ctime > last->next->ctime) ||
+		if ((last->ctime > last->next->ctime) ||
 			((last->ctime == last->next->ctime)
-			&& (ft_strcmp(last->name_file, last->next->name_file) < 0))))
+			&& (ft_strcmp(last->name_file, last->next->name_file) < 0)))
 		{
 			(&dir->last_file->size == &last->next->size)
 			? dir->last_file = last : 0;
@@ -50,7 +50,7 @@ void				sort_list_btime(t_dir *dir, t_info *first, t_info *last)
 	}
 }
 
-void				sort_list_bname(t_dir *dir, t_info *first, t_info *last)
+static inline void	sort_list_bname(t_dir *dir, t_info *first, t_info *last)
 {
 	while (first->next && last->prev)
 	{
@@ -72,4 +72,12 @@ void				sort_list_bname(t_dir *dir, t_info *first, t_info *last)
 		first = first->next;
 		last = last->prev;
 	}
+}
+
+void	sort_lists(t_ls *ls, t_dir *dir)
+{
+	if (ls->flag & FLAG_T)
+		sort_list_btime(dir, dir->head, dir->last_file->prev);
+	else
+		sort_list_bname(dir, dir->head, dir->last_file->prev);
 }
