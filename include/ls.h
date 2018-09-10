@@ -77,6 +77,8 @@ char			*ft_strjoin_dir(char const *s1, char const *s2);
 void			read_dir_info(t_ls *ls, const char *dir_name);
 t_info			*new_file(t_dir *dir);
 t_dir			*new_dir(t_ls *ls, const char *name);
+void			sort_list_bname(t_dir *dir, t_info *first, t_info *last);
+void			sort_list_btime(t_dir *dir, t_info *first, t_info *last);
 void			free_lists(t_dir *head);
 
 #endif

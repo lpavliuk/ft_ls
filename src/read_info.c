@@ -12,6 +12,26 @@
 
 #include "../include/ls.h"
 
+static inline void	find_link(t_info *file)
+{
+	char	*tmp;
+	char	*buf;
+	ssize_t	size;
+
+	buf = malloc(PATH_MAX);
+	ft_bzero(buf, PATH_MAX);
+	size = readlink(file->pwd, buf, PATH_MAX);
+	buf[size] = '\0';
+	ft_printf("size: %zu | %s ---> %.*s\n", size, file->pwd, (int)size, buf);
+	tmp = file->name_file;
+	file->name_file = ft_strjoin(file->name_file, " -> ");
+	free(tmp);
+	tmp = file->name_file;
+	file->name_file = ft_strjoin(file->name_file, buf);
+	free(tmp);
+	free(buf);
+}
+
 static inline void	read_file_info(t_ls *ls, t_info *file)
 {
 	lstat(file->pwd, &ls->stat);
@@ -26,6 +46,8 @@ static inline void	read_file_info(t_ls *ls, t_info *file)
 	file->ctime = (size_t)ls->stat.st_ctime;
 	ft_strncpy(&file->data[0], ctime(&ls->stat.st_ctime), 24);
 	check_mode(file, ls->stat.st_mode, &file->mode[0]);
+	if (file->mode[0] == 'l')
+		find_link(file);
 }
 
 void				read_dir_info(t_ls *ls, const char *dir_name)
@@ -38,6 +60,8 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 		return ;
 	while ((ls->file = readdir(ls->fd_dir)))
 	{
+		if (!(ls->flag & FLAG_A) && ls->file->d_name[0] == '.')
+			continue ;
 		file = new_file(dir);
 		file->name_file = ft_strdup(ls->file->d_name);
 		file->pwd = ft_strjoin_dir(dir_name, file->name_file);

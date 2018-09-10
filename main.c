@@ -33,23 +33,21 @@ void	check_head(t_info *head)
 //		ft_printf("file->gid:[{white}   %u   {eoc}]\n", head->gid);
 //		ft_printf("file->group:[{yellow}   %s   {eoc}]\n", group->gr_name);
 //		ft_printf("file->size:[{red} %u   {eoc}]\n", head->size);
-		ft_printf("ctime:[ %u  ]\n", head->ctime);
-		ft_printf("file->data:[{pink}  %s  {eoc}]\n", head->data);
+//		ft_printf("ctime:[ %u  ]\n", head->ctime);
+//		ft_printf("file->data:[{pink}  %s  {eoc}]\n", head->data);
 		head = head->next;
 	}
 }
 /*****************************************************
 ******************************************************/
 
-//void	sort_lists(t_ls *ls)
-//{
-//	if (ls->flag & FLAG_RR)
-//		sort_desc();
-//	else if (ls->flag & FLAG_T)
-//		sort_time();
-//	else
-//		sort_asc();
-//}
+void	sort_lists(t_ls *ls)
+{
+	if (ls->flag & FLAG_T)
+		sort_list_btime(ls->dirs, ls->dirs->head, ls->dirs->last_file->prev);
+	else
+		sort_list_bname(ls->dirs, ls->dirs->head, ls->dirs->last_file->prev);
+}
 
 int		main(int argc, char **argv)
 {
@@ -71,18 +69,20 @@ int		main(int argc, char **argv)
 		read_dir_info(ls, ".");
 
 	tmp = ls->dirs;
-	while (ls->dirs)
+	while (tmp)
 	{
 //		ft_printf("{blue}   %s: {eoc}\n", ls->dirs->name);
 //		ft_printf("=========================\n");
 //		ft_printf("ls->total:[{green}  %u  {eoc}]\n", ls->dirs->total);
-		check_head(ls->dirs->head);
-		ls->dirs = ls->dirs->next;
+		check_head(tmp->head);
+		tmp = tmp->next;
 	}
+//
 	ft_printf("======> SORT!!! <======\n");
-	if (tmp->head)
-		sort_list_btime(tmp, tmp->head, tmp->last_file->prev);
+	if (ls->dirs->head)
+		sort_lists(ls);
 
+	tmp = ls->dirs;
 	while (tmp)
 	{
 //		ft_printf("{blue}   %s: {eoc}\n", tmp->name);

@@ -21,7 +21,8 @@ static inline void	ft_usage(const char flag)
 
 void				check_flags(t_ls *ls, const char *flag)
 {
-	while (*flag++ != '\0')
+	(*(flag + 1)) ? ++flag : 0;
+	while (flag && *flag != '\0')
 	{
 		if (*flag == 'l')
 			ls->flag |= 0x01;
@@ -39,7 +40,8 @@ void				check_flags(t_ls *ls, const char *flag)
 			ls->flag |= 0x40;
 		else if (*flag == 'd')
 			ls->flag |= 0x80;
-		else if (*flag != '\0')
+		else
 			ft_usage(*flag);
+		++flag;
 	}
 }
