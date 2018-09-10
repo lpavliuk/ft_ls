@@ -33,7 +33,8 @@ void	check_head(t_info *head)
 //		ft_printf("file->gid:[{white}   %u   {eoc}]\n", head->gid);
 //		ft_printf("file->group:[{yellow}   %s   {eoc}]\n", group->gr_name);
 //		ft_printf("file->size:[{red} %u   {eoc}]\n", head->size);
-//		ft_printf("file->data:[{pink}  %s  {eoc}]\n", head->data);
+		ft_printf("ctime:[ %u  ]\n", head->ctime);
+		ft_printf("file->data:[{pink}  %s  {eoc}]\n", head->data);
 		head = head->next;
 	}
 }
@@ -50,14 +51,37 @@ void	swap_elem(t_info *a, t_info *b)
 	a->prev = b;
 }
 
-void	check_sort(t_dir *dir)
+void	sort_list_btime(t_dir *dir, t_info *first, t_info *last)
 {
-	t_info	*first;
-	t_info	*last;
 	char	swap;
 
-	first = dir->head;
-	last = dir->last_file->prev;
+	while (first->next && last->prev)
+	{
+		swap = 0;
+		if (first->ctime < first->next->ctime && (swap |= 1))
+		{
+			(&dir->head->size == &first->size) ? dir->head = first->next : 0;
+			swap_elem(first, first->next);
+			first = dir->head;
+		}
+		if (last->ctime < last->next->ctime && (swap |= 1))
+		{
+			(&dir->last_file->size == &last->next->size)
+			? dir->last_file = last : 0;
+			swap_elem(last, last->next);
+			last = dir->last_file->prev;
+		}
+		if (swap)
+			continue ;
+		first = first->next;
+		last = last->prev;
+	}
+}
+
+void	sort_list_bname(t_dir *dir, t_info *first, t_info *last)
+{
+	char	swap;
+
 	while (first->next && last->prev)
 	{
 		swap = 0;
@@ -72,7 +96,7 @@ void	check_sort(t_dir *dir)
 			&& (swap |= 1))
 		{
 			(&dir->last_file->size == &last->next->size)
-			? dir->last_file = last->next : 0;
+			? dir->last_file = last : 0;
 			swap_elem(last, last->next);
 			last = dir->last_file->prev;
 		}
@@ -95,17 +119,19 @@ void	check_sort(t_dir *dir)
 
 int		main(int argc, char **argv)
 {
-	t_ls *ls;
+	t_ls	*ls;
 	t_dir	*tmp;
+	int		i;
 
+	i = 0;
 	ls = (t_ls *)malloc(sizeof(t_ls));
-	ft_bzero(ls, sizeof(*ls));
-	if (argc > 1 && argv[1][0] == '-' && argc--)
+	ft_bzero(ls, sizeof(t_ls));
+	if (argc > 1 && argv[1][0] == '-' && ++i)
 		check_flags(ls, argv[1]);
-	if (argc > 1)
+	if ((argc > 1 && !ls->flag) || (argc > 2 && ls->flag))
 	{
-		while (--argc > 0)
-			read_dir_info(ls, argv[argc]);
+		while (++i < argc)
+			read_dir_info(ls, argv[i]);
 	}
 	else
 		read_dir_info(ls, ".");
@@ -116,12 +142,12 @@ int		main(int argc, char **argv)
 //		ft_printf("{blue}   %s: {eoc}\n", ls->dirs->name);
 //		ft_printf("=========================\n");
 //		ft_printf("ls->total:[{green}  %u  {eoc}]\n", ls->dirs->total);
-//		check_head(ls->dirs->head);
+		check_head(ls->dirs->head);
 		ls->dirs = ls->dirs->next;
 	}
-//	ft_printf("======> SORT!!! <======\n");
+	ft_printf("======> SORT!!! <======\n");
 	if (tmp->head)
-		check_sort(tmp);
+		sort_list_btime(tmp, tmp->head, tmp->last_file->prev);
 
 	while (tmp)
 	{
