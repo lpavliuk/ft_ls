@@ -46,7 +46,7 @@ void	check_file_or_dir(t_ls *ls, char *argv)
 	t_info *file;
 
 	if (lstat(argv, &ls->stat) < 0)
-		ft_printf("ls: %s: No such file or directory\n");
+		ft_printf("ls: %s: No such file or directory\n", argv);
 	else
 	{
 		if (S_ISDIR(ls->stat.st_mode))
@@ -106,7 +106,7 @@ int		main(int argc, char **argv)
 		{
 			ft_printf("file->name:[{green}  %s   {eoc}]\n", tmp->head->name_file);
 			tmp->head = tmp->head->next;
-
+		}
 		tmp = tmp->next;
 	}
 
