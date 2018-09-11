@@ -63,6 +63,7 @@ typedef struct	s_dir
 	t_info			*last_file;
 	size_t 			s_name;
 	size_t 			s_group;
+	size_t			s_size;
 	struct s_dir	*next;
 	struct s_dir	*prev;
 }				t_dir;

@@ -79,22 +79,38 @@ static inline void	check_ls(t_ls *ls)
 /*****************************************************
 ******************************************************/
 
-void 	output_for_ln(t_info *file, t_ls *ls)
+void 	output_for_ln(t_info *file, t_ls *ls, t_dir *dir)
 {
-	t_info			*tmp;
-
-	tmp = file;
-	while (tmp)
+	while (file)
 	{
-		if (!tmp->fail_file && ls->flag & FLAG_N)
-			ft_printf("%s%2d %-5d %-5d %6d %12.12s %s\n", tmp->mode, tmp->nlinks,
-			tmp->uid, tmp->gid, tmp->size, &tmp->data[4], tmp->name_file);
-		else if (!tmp->fail_file)
-			ft_printf("%s%2d %-*s %-*s %6d %12.12s %s\n",
-			tmp->mode, tmp->nlinks, ls->files->s_name, tmp->pwuid->pw_name,
-			ls->files->s_group, tmp->group->gr_name, tmp->size, &tmp->data[4],
-			tmp->name_file);
-		tmp = tmp->next;
+		if (!file->fail_file)
+		{
+			if (ls->flag & FLAG_N)
+				ft_printf("%s%2d %-5d %-5d %*d %12.12s %s\n", file->mode,
+				file->nlinks, file->uid, file->gid, dir->s_size, file->size,
+				&file->data[4], file->name_file);
+			else if (file->mode[0] != 'c')
+				ft_printf("%s%2d %-*s %-*s %*d %12.12s %s\n",
+				file->mode, file->nlinks, dir->s_name, file->pwuid->pw_name,
+				dir->s_group, file->group->gr_name, dir->s_size, file->size,
+				&file->data[4], file->name_file);
+			else
+				ft_printf("%s%2d %-*s %-*s %4d, %4d %12.12s %s\n", file->mode,
+				file->nlinks, dir->s_name, file->pwuid->pw_name, dir->s_group,
+				file->group->gr_name, major(file->rdev), minor(file->rdev),
+				&file->data[4], file->name_file);
+		}
+		file = file->next;
+	}
+}
+
+void	output_just(t_info *file)
+{
+	while (file)
+	{
+		if (!file->fail_file)
+			ft_printf("%s\n", file->name_file);
+		file = file->next;
 	}
 }
 
@@ -110,9 +126,9 @@ void	output_errnfiles(t_ls *ls, t_info *file)
 		tmp = tmp->next;
 	}
 	if (ls->flag & FLAG_N || ls->flag & FLAG_L)
-		output_for_ln(file, ls);
-//	else
-//		output_just(file);
+		output_for_ln(file, ls, ls->files);
+	else
+		output_just(file);
 }
 
 void	output_mode(t_ls *ls)
@@ -135,6 +151,7 @@ int		main(int argc, char **argv)
 	ft_bzero(ls, sizeof(t_ls));
 	ls->files = (t_dir *)malloc(sizeof(t_dir));
 	ft_bzero(ls->files, sizeof(t_dir));
+	ls->files->s_size = 6;
 	if (argc > 1 && argv[1][0] == '-' && ++i)
 		check_flags(ls, argv[1]);
 	if ((argc > 1 && !ls->flag) || (argc > 2 && ls->flag))
@@ -145,14 +162,15 @@ int		main(int argc, char **argv)
 	else
 		read_dir_info(ls, ".");
 
-	check_ls(ls);
-	ft_printf("======> SORT!!! <======\n");
+//	check_ls(ls);
+//	ft_printf("======> SORT!!! <======\n");
 	if (ls->files && ls->files->head)
 		sort_lists(ls, ls->files);
 	if (ls->dirs && ls->dirs->head)
 		sort_lists(ls, ls->dirs);
 
 	check_ls(ls);
+	ft_printf("---------------------------------------\n");
 //	output(ls);
 	output_mode(ls);
 

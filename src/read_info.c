@@ -51,6 +51,8 @@ static inline void	read_file_info(t_ls *ls, t_dir *dir, t_info *file)
 	check_mode(file, ls->stat.st_mode, &file->mode[0]);
 	if (file->mode[0] == 'l')
 		find_link(file);
+	else if (file->mode[0] == 'c')
+		dir->s_size = 10;
 	n = ft_strlen(file->group->gr_name);
 	(n > dir->s_group) ? dir->s_group = n : 0;
 	n = ft_strlen(file->pwuid->pw_name);
