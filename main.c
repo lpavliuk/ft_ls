@@ -41,44 +41,38 @@ static inline void	check_head(t_info *head)
 
 static inline void	check_ls(t_ls *ls)
 {
-	t_dir	*tmp;
+	t_dir	*dir;
+	t_info 	*tmp1;
+	t_info 	*tmp2;
 
-	tmp = ls->files;
-	while (tmp)
+	tmp1 = ls->files->head;
+	while (tmp1)
 	{
-		while (tmp->head)
-		{
-			if (tmp->head->fail_file)
-				ft_printf("ls: %s: No such file or directory\n", tmp->head->name_file);
-			tmp->head = tmp->head->next;
-		}
-		tmp = tmp->next;
+		if (tmp1->fail_file)
+			ft_printf("ls: %s: No such file or directory\n", tmp1->name_file);
+		tmp1 = tmp1->next;
 	}
 
-	tmp = ls->files;
-	while (tmp)
+	tmp2 = ls->files->head;
+	while (tmp2)
 	{
-		while (tmp->head)
-		{
-			if (!tmp->head->fail_file)
-				ft_printf("file->name:[{green}  %s   {eoc}]\n", tmp->head->name_file);
-			tmp->head = tmp->head->next;
-		}
-		tmp = tmp->next;
+		if (!tmp2->fail_file)
+			ft_printf("file->name:[{green}  %s   {eoc}]\n", tmp2->name_file);
+		tmp2 = tmp2->next;
 	}
 
-	tmp = ls->dirs;
-	while (tmp)
+	dir = ls->dirs;
+	while (dir)
 	{
-		if (!tmp->close)
+		if (!dir->close)
 		{
-			ft_printf("\n%s:\n", tmp->name);
-			ft_printf("ls->total:[{green}  %u  {eoc}]\n", tmp->total);
-			check_head(tmp->head);
+			ft_printf("\n%s:\n", dir->name);
+			ft_printf("ls->total:[{green}  %u  {eoc}]\n", dir->total);
+			check_head(dir->head);
 		}
 		else
-			ft_printf("\n%s:\nls: %s: Permission denied\n", tmp->name, tmp->name);
-		tmp = tmp->next;
+			ft_printf("\n%s:\nls: %s: Permission denied\n", dir->name, dir->name);
+		dir = dir->next;
 	}
 
 }
@@ -117,6 +111,6 @@ int		main(int argc, char **argv)
 
 
 	free_lists(ls->dirs);
-	system("leaks a.out");
+//	system("leaks a.out");
 	return (0);
 }

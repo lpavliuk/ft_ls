@@ -82,7 +82,7 @@ void				check_file_or_dir(t_ls *ls, char *argv)
 	int 	num;
 
 	num = lstat(argv, &ls->stat);
-	if (S_ISDIR(ls->stat.st_mode))
+	if (S_ISDIR(ls->stat.st_mode) && num >= 0)
 		read_dir_info(ls, argv);
 	else
 	{
