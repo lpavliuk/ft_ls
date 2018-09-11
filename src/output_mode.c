@@ -12,7 +12,7 @@
 
 #include "../include/ls.h"
 
-void 	output_ln(t_info *file, t_ls *ls, t_dir *dir)
+void	output_ln(t_info *file, t_ls *ls, t_dir *dir)
 {
 	while (file)
 	{
@@ -22,16 +22,16 @@ void 	output_ln(t_info *file, t_ls *ls, t_dir *dir)
 				ft_printf("%s %*d %-5d %-5d %*d %12.12s %s\n", file->mode,
 				dir->s_link, file->nlinks, file->uid, file->gid, dir->s_size,
 				file->size, &file->data[4], file->name_file);
-			else if (file->mode[0] != 'c')
-				ft_printf("%s %*d %-*s %*s %*d %12.12s %s\n", file->mode,
-				dir->s_link, file->nlinks, dir->s_name, file->pwuid->pw_name,
-				dir->s_group, file->group->gr_name, dir->s_size, file->size,
-				&file->data[4], file->name_file);
-			else
-				ft_printf("%s %*d %-*s %-*s %4d, %4d %12.12s %s\n", file->mode,
-				dir->s_link, file->nlinks, dir->s_name, file->pwuid->pw_name,
-				dir->s_group, file->group->gr_name, major(file->rdev),
+			else if (file->mode[0] == 'c' || file->mode[0] == 'b')
+				ft_printf("%s %*d %-*s %-*s %3d, %3d %12.12s %s\n", file->mode,
+				dir->s_link, file->nlinks, dir->s_name, file->name_user,
+				dir->s_group, file->name_group, major(file->rdev),
 				minor(file->rdev), &file->data[4], file->name_file);
+			else
+				ft_printf("%s %*d %-*s %-*s %*d %12.12s %s\n", file->mode,
+				dir->s_link, file->nlinks, dir->s_name, file->name_user,
+				dir->s_group, file->name_group, dir->s_size, file->size,
+				&file->data[4], file->name_file);
 		}
 		file = (ls->flag & FLAG_RR) ? file->prev : file->next;
 	}
@@ -40,7 +40,6 @@ void 	output_ln(t_info *file, t_ls *ls, t_dir *dir)
 void	output_just(t_dir *dir, char flag)
 {
 	t_info *tmp;
-
 
 	tmp = (flag & FLAG_RR) ? dir->last_file : dir->head;
 	while (tmp)

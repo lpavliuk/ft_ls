@@ -80,12 +80,29 @@ static inline void	check_ls(t_ls *ls)
 /*****************************************************
 ******************************************************/
 
-void	output_mode(t_ls *ls)
+void	output_mode(t_ls *ls, t_dir **next)
 {
-	output_errnfiles(ls, ls->files->head);
-	if (ls->flag & FLAG_L || ls->flag & FLAG_N )
-		output_tn(ls->dir);
-
+	if (ls->files->head)
+		output_errnfiles(ls, ls->files->head);
+	if (ls->flag & FLAG_L || ls->flag & FLAG_N)
+	{
+		while (ls->dirs)
+		{
+			if (ls->dirs->head)
+				sort_lists(ls, ls->dirs);
+			if (*next)
+				ft_printf("%s:\n", ls->dirs->name);
+			ft_printf("total %d\n", ls->dirs->total);
+			if (ls->dirs->head && ls->flag & FLAG_RR)
+				output_ln(ls->dirs->last_file, ls, ls->dirs);
+			else
+				output_ln(ls->dirs->head, ls, ls->dirs);
+			if (ls->dirs->next)
+				write(1, "\n", 1);
+			ls->dirs = ls->dirs->next;
+		}
+	}
+//	else
 //	if (ls->flag & FLAG_R)
 //		recursion();
 }
@@ -100,13 +117,11 @@ int		main(int argc, char **argv)
 	ft_bzero(ls, sizeof(t_ls));
 	ls->files = (t_dir *)malloc(sizeof(t_dir));
 	ft_bzero(ls->files, sizeof(t_dir));
-	if (argc > 1 && argv[1][0] == '-' && ++i)
+	if (argc > 1 && argv[1][0] == '-')
 		check_flags(ls, argv, &i);
-	if ((argc > 1 && !ls->flag) || (argc > 2 && ls->flag))
-	{
+	if ((argc > 1 && i < argc && !ls->flag) || (argc > 2 && ls->flag))
 		while (i < argc)
-			check_file_or_dir(ls, argv[i++]);
-	}
+			read_info(ls, argv[i++]);
 	else
 		read_dir_info(ls, ".");
 
@@ -114,16 +129,11 @@ int		main(int argc, char **argv)
 //	ft_printf("======> SORT!!! <======\n");
 	if (ls->files && ls->files->head)
 		sort_lists(ls, ls->files);
-	if (ls->dirs && ls->dirs->head)
-		sort_lists(ls, ls->dirs);
-
 	check_ls(ls);
 	ft_printf("---------------------------------------\n");
-//	output(ls);
-	output_mode(ls);
 
+	output_mode(ls, &ls->dirs->next);
 
-	free_lists(ls->dirs);
 //	system("leaks a.out");
 	return (0);
 }

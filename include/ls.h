@@ -36,6 +36,8 @@ typedef struct	s_info
 {
 	char			*name_file;
 	char 			*pwd;
+	char 			*name_group;
+	char 			*name_user;
 	char 			fail_file : 1;
 	char			mode[12];
 	char			data[25];
@@ -44,9 +46,6 @@ typedef struct	s_info
 	off_t			size;
 	uid_t			uid;
 	gid_t			gid;
-	blkcnt_t		blocks;
-	size_t			atime;
-	size_t			mtime;
 	size_t			ctime;
 	struct passwd	*pwuid;
 	struct group	*group;
@@ -83,12 +82,11 @@ typedef struct	s_ls
 void			check_mode(t_info *file, unsigned int mode, char *permfile);
 void			check_flags(t_ls *ls, char **argv, int *i);
 char			*ft_strjoin_dir(char const *s1, char const *s2);
+void			read_info(t_ls *ls, char *argv);
 void			read_dir_info(t_ls *ls, const char *dir_name);
 t_info			*new_file(t_dir *dir);
 t_dir			*new_dir(t_ls *ls, const char *name);
-void			free_lists(t_dir *head);
 void			sort_lists(t_ls *ls, t_dir *dir);
-void			check_file_or_dir(t_ls *ls, char *argv);
 void 			output_ln(t_info *file, t_ls *ls, t_dir *dir);
 void			output_just(t_dir *dir, char flag);
 void			output_errnfiles(t_ls *ls, t_info *file);

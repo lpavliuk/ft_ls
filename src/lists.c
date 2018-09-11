@@ -12,25 +12,6 @@
 
 #include "../include/ls.h"
 
-void	free_lists(t_dir *list)
-{
-	t_info *tmp;
-
-	while (list)
-	{
-		while (list->head)
-		{
-			tmp = list->head;
-			free(list->head->name_file);
-			free(list->head->pwd);
-			list->head = list->head->next;
-			free(tmp);
-		}
-		free(list->name);
-		list = list->next;
-	}
-}
-
 t_dir	*new_dir(t_ls *ls, const char *name)
 {
 	if (!ls->dirs)

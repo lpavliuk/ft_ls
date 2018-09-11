@@ -41,21 +41,20 @@ static inline void	read_file_info(t_ls *ls, t_dir *dir, t_info *file)
 	file->gid = ls->stat.st_gid;
 	file->group = getgrgid(file->gid);
 	file->pwuid = getpwuid(file->uid);
+	file->name_group = ft_strdup(file->group->gr_name);
+	file->name_user = ft_strdup(file->pwuid->pw_name);
 	file->rdev = ls->stat.st_rdev;
-	file->blocks = ls->stat.st_blocks;
 	file->size = ls->stat.st_size;
-	file->atime = (size_t)ls->stat.st_atime;
-	file->mtime = (size_t)ls->stat.st_mtime;
 	file->ctime = (size_t)ls->stat.st_ctime;
 	ft_strncpy(&file->data[0], ctime(&ls->stat.st_ctime), 24);
 	check_mode(file, ls->stat.st_mode, &file->mode[0]);
-	(file->mode[0] == 'l') ? find_link(file): 0;
-	(file->mode[0] == 'c') ? dir->s_size = 10 : 0;
+	(file->mode[0] == 'l') ? find_link(file) : 0;
+	(file->mode[0] == 'c') ? dir->s_size = 8 : 0;
 	n = ft_strlen(file->group->gr_name) + 1;
 	(n > dir->s_group) ? dir->s_group = n : 0;
-	n = ft_strlen(file->pwuid->pw_name);
+	n = ft_strlen(file->pwuid->pw_name) + 1;
 	(n > dir->s_name) ? dir->s_name = n : 0;
-	n = ft_count(file->size, 10) + 1;
+	n = ft_count(file->size, 10);
 	(n > dir->s_size) ? dir->s_size = n : 0;
 	n = ft_count(file->nlinks, 10);
 	(n > dir->s_link) ? dir->s_link = n : 0;
@@ -75,10 +74,7 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 	while ((ls->file = readdir(ls->fd_dir)))
 	{
 		if (!(ls->flag & FLAG_A) && ls->file->d_name[0] == '.')
-		{
-			ft_printf("%x\n", ls->flag);
 			continue;
-		}
 		file = new_file(dir);
 		file->name_file = ft_strdup(ls->file->d_name);
 		file->pwd = ft_strjoin_dir(dir_name, file->name_file);
@@ -90,13 +86,13 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 	closedir(ls->fd_dir);
 }
 
-void				check_file_or_dir(t_ls *ls, char *argv)
+void				read_info(t_ls *ls, char *argv)
 {
 	t_info	*file;
 	int		num;
 
 	num = lstat(argv, &ls->stat);
-	if (S_ISDIR(ls->stat.st_mode) && num >= 0)
+	if (S_ISDIR(ls->stat.st_mode) && num >= 0 && !(ls->flag & FLAG_D))
 		read_dir_info(ls, argv);
 	else
 	{
