@@ -13,7 +13,7 @@
 #include "include/ls.h"
 
 /**************** CHECK LS->HEAD **********************/
-void	check_head(t_info *head)
+static inline void	check_head(t_info *head)
 {
 	struct passwd	*pwuid;
 	struct group	*group;
@@ -38,33 +38,56 @@ void	check_head(t_info *head)
 		head = head->next;
 	}
 }
+
+static inline void	check_ls(t_ls *ls)
+{
+	t_dir	*tmp;
+
+	tmp = ls->files;
+	while (tmp)
+	{
+		while (tmp->head)
+		{
+			if (tmp->head->fail_file)
+				ft_printf("ls: %s: No such file or directory\n", tmp->head->name_file);
+			tmp->head = tmp->head->next;
+		}
+		tmp = tmp->next;
+	}
+
+	tmp = ls->files;
+	while (tmp)
+	{
+		while (tmp->head)
+		{
+			if (!tmp->head->fail_file)
+				ft_printf("file->name:[{green}  %s   {eoc}]\n", tmp->head->name_file);
+			tmp->head = tmp->head->next;
+		}
+		tmp = tmp->next;
+	}
+
+	tmp = ls->dirs;
+	while (tmp)
+	{
+		if (!tmp->close)
+		{
+			ft_printf("\n%s:\n", tmp->name);
+			ft_printf("ls->total:[{green}  %u  {eoc}]\n", tmp->total);
+			check_head(tmp->head);
+		}
+		else
+			ft_printf("\n%s:\nls: %s: Permission denied\n", tmp->name, tmp->name);
+		tmp = tmp->next;
+	}
+
+}
 /*****************************************************
 ******************************************************/
-
-void	check_file_or_dir(t_ls *ls, char *argv)
-{
-	t_info *file;
-
-	if (lstat(argv, &ls->stat) < 0)
-		ft_printf("ls: %s: No such file or directory\n", argv);
-	else
-	{
-		if (S_ISDIR(ls->stat.st_mode))
-			read_dir_info(ls, argv);
-		else
-		{
-			file = new_file(ls->files);
-			file->name_file = ft_strdup(argv);
-			read_file_info(ls, file);
-			ft_bzero(&ls->stat, sizeof(ls->stat));
-		}
-	}
-}
 
 int		main(int argc, char **argv)
 {
 	t_ls	*ls;
-	t_dir	*tmp;
 	int		i;
 
 	i = 0;
@@ -82,49 +105,18 @@ int		main(int argc, char **argv)
 	else
 		read_dir_info(ls, ".");
 
-//	ft_printf("ok1\n");
-	tmp = ls->dirs;
-	while (tmp)
-	{
-//		ft_printf("{blue}   %s: {eoc}\n", ls->dirs->name);
-//		ft_printf("=========================\n");
-//		ft_printf("ls->total:[{green}  %u  {eoc}]\n", ls->dirs->total);
-		check_head(tmp->head);
-		tmp = tmp->next;
-	}
-//
 	ft_printf("======> SORT!!! <======\n");
 	if (ls->files && ls->files->head)
 		sort_lists(ls, ls->files);
 	if (ls->dirs && ls->dirs->head)
 		sort_lists(ls, ls->dirs);
 
-	tmp = ls->files;
-	while (tmp)
-	{
-		while (tmp->head)
-		{
-			ft_printf("file->name:[{green}  %s   {eoc}]\n", tmp->head->name_file);
-			tmp->head = tmp->head->next;
-		}
-		tmp = tmp->next;
-	}
-
-	tmp = ls->dirs;
-	while (tmp)
-	{
-//		ft_printf("{blue}   %s: {eoc}\n", tmp->name);
-//		ft_printf("=========================\n");
-		ft_printf("ls->total:[{green}  %u  {eoc}]\n", tmp->total);
-		check_head(tmp->head);
-		tmp = tmp->next;
-	}
-
+	check_ls(ls);
 //	output(ls);
 
 
 
-	free_lists(tmp);
-//	system("leaks a.out");
+	free_lists(ls->dirs);
+	system("leaks a.out");
 	return (0);
 }

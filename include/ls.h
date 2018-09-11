@@ -36,6 +36,7 @@ typedef struct	s_info
 {
 	char			*name_file;
 	char 			*pwd;
+	char 			fail_file : 1;
 	char			mode[12];
 	char			data[25];
 	nlink_t			nlinks;
@@ -54,6 +55,7 @@ typedef struct	s_info
 typedef struct	s_dir
 {
 	char 			*name;
+	char 			close : 1;
 	size_t			total;
 	t_info			*head;
 	t_info			*last_file;
@@ -66,7 +68,7 @@ typedef struct	s_ls
 	DIR				*fd_dir;
 	struct dirent	*file;
 	struct stat		stat;
-	unsigned char 	flag;
+	unsigned char 	flag : 1;
 	t_dir			*files;
 	t_dir			*dirs;
 	t_dir			*last_dir;
@@ -80,7 +82,6 @@ t_info			*new_file(t_dir *dir);
 t_dir			*new_dir(t_ls *ls, const char *name);
 void			free_lists(t_dir *head);
 void			sort_lists(t_ls *ls, t_dir *dir);
-
-void	read_file_info(t_ls *ls, t_info *file);
+void			check_file_or_dir(t_ls *ls, char *argv);
 
 #endif

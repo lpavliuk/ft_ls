@@ -32,7 +32,7 @@ static inline void	find_link(t_info *file)
 	free(buf);
 }
 
-void	read_file_info(t_ls *ls, t_info *file)
+static inline void	read_file_info(t_ls *ls, t_info *file)
 {
 	lstat(file->pwd, &ls->stat);
 	file->nlinks = ls->stat.st_nlink;
@@ -58,7 +58,7 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 	dir = new_dir(ls, dir_name);
 	if ((ls->fd_dir = opendir(dir_name)) <= 0)
 	{
-		ft_printf("%s:\nls: %s: Permission denied\n", dir_name, dir_name);
+		dir->close = 1;
 		return ;
 	}
 	while ((ls->file = readdir(ls->fd_dir)))
@@ -74,4 +74,24 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 		ft_bzero(&ls->stat, sizeof(ls->stat));
 	}
 	closedir(ls->fd_dir);
+}
+
+void				check_file_or_dir(t_ls *ls, char *argv)
+{
+	t_info	*file;
+	int 	num;
+
+	num = lstat(argv, &ls->stat);
+	if (S_ISDIR(ls->stat.st_mode))
+		read_dir_info(ls, argv);
+	else
+	{
+		file = new_file(ls->files);
+		file->name_file = ft_strdup(argv);
+		if (num < 0)
+			file->fail_file = 1;
+		else
+			read_file_info(ls, file);
+		ft_bzero(&ls->stat, sizeof(ls->stat));
+	}
 }
