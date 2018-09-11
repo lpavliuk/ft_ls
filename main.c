@@ -26,6 +26,7 @@ static inline void	check_head(t_info *head)
 //        ft_printf("file->rdev:[{white}   %u   {eoc}]\n", head->rdev);
 //		ft_printf("file->blocks:[{pink}   %u   {eoc}]\n", head->blocks);
 		ft_printf("file->name:[{green}  %s   {eoc}]\n", head->name_file);
+		ft_printf("%d\n", head->fail_file);
 //		ft_printf("file->mode:[{blue}   %s  {eoc}]\n", head->mode);
 //		ft_printf("file->nlinks:[{white}   %u   {eoc}]\n", head->nlinks);
 //		ft_printf("file->uid:[{white}   %u   {eoc}]\n", head->uid);
@@ -79,63 +80,11 @@ static inline void	check_ls(t_ls *ls)
 /*****************************************************
 ******************************************************/
 
-void 	output_for_ln(t_info *file, t_ls *ls, t_dir *dir)
-{
-	while (file)
-	{
-		if (!file->fail_file)
-		{
-			if (ls->flag & FLAG_N)
-				ft_printf("%s%2d %-5d %-5d %*d %12.12s %s\n", file->mode,
-				file->nlinks, file->uid, file->gid, dir->s_size, file->size,
-				&file->data[4], file->name_file);
-			else if (file->mode[0] != 'c')
-				ft_printf("%s%2d %-*s %-*s %*d %12.12s %s\n",
-				file->mode, file->nlinks, dir->s_name, file->pwuid->pw_name,
-				dir->s_group, file->group->gr_name, dir->s_size, file->size,
-				&file->data[4], file->name_file);
-			else
-				ft_printf("%s%2d %-*s %-*s %4d, %4d %12.12s %s\n", file->mode,
-				file->nlinks, dir->s_name, file->pwuid->pw_name, dir->s_group,
-				file->group->gr_name, major(file->rdev), minor(file->rdev),
-				&file->data[4], file->name_file);
-		}
-		file = file->next;
-	}
-}
-
-void	output_just(t_info *file)
-{
-	while (file)
-	{
-		if (!file->fail_file)
-			ft_printf("%s\n", file->name_file);
-		file = file->next;
-	}
-}
-
-void	output_errnfiles(t_ls *ls, t_info *file)
-{
-	t_info *tmp;
-
-	tmp = file;
-	while (tmp)
-	{
-		if (tmp->fail_file)
-			ft_printf("ls: %s: No such file or directory\n", tmp->name_file);
-		tmp = tmp->next;
-	}
-	if (ls->flag & FLAG_N || ls->flag & FLAG_L)
-		output_for_ln(file, ls, ls->files);
-	else
-		output_just(file);
-}
-
 void	output_mode(t_ls *ls)
 {
 	output_errnfiles(ls, ls->files->head);
-//	if (ls->flag & FLAG_L || ls->flag & FLAG_N)
-//		output_tn(ls->dir);
+	if (ls->flag & FLAG_L || ls->flag & FLAG_N )
+		output_tn(ls->dir);
 
 //	if (ls->flag & FLAG_R)
 //		recursion();
@@ -151,13 +100,12 @@ int		main(int argc, char **argv)
 	ft_bzero(ls, sizeof(t_ls));
 	ls->files = (t_dir *)malloc(sizeof(t_dir));
 	ft_bzero(ls->files, sizeof(t_dir));
-	ls->files->s_size = 6;
 	if (argc > 1 && argv[1][0] == '-' && ++i)
-		check_flags(ls, argv[1]);
+		check_flags(ls, argv, &i);
 	if ((argc > 1 && !ls->flag) || (argc > 2 && ls->flag))
 	{
-		while (++i < argc)
-			check_file_or_dir(ls, argv[i]);
+		while (i < argc)
+			check_file_or_dir(ls, argv[i++]);
 	}
 	else
 		read_dir_info(ls, ".");

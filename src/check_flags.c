@@ -19,29 +19,32 @@ static inline void	ft_usage(const char flag)
 	exit(0);
 }
 
-void				check_flags(t_ls *ls, const char *flag)
+void				check_flags(t_ls *ls, char **argv, int *i)
 {
-	(*(flag + 1)) ? ++flag : 0;
-	while (flag && *flag != '\0')
+	while (argv[*i][0] == '-' && ++argv[*i])
 	{
-		if (*flag == 'l')
-			ls->flag |= 0x01;
-		else if (*flag == 'a')
-			ls->flag |= 0x02;
-		else if (*flag == 'R')
-			ls->flag |= 0x04;
-		else if (*flag == 'r')
-			ls->flag |= 0x08;
-		else if (*flag == 't')
-			ls->flag |= 0x10;
-		else if (*flag == 'n')
-			ls->flag |= 0x20;
-		else if (*flag == 'G')
-			ls->flag |= 0x40;
-		else if (*flag == 'd')
-			ls->flag |= 0x80;
-		else
-			ft_usage(*flag);
-		++flag;
+		while (*argv[*i] && *argv[*i] != '\0')
+		{
+			if (*argv[*i] == 'l')
+				ls->flag |= 0x01;
+			else if (*argv[*i] == 'a')
+				ls->flag |= 0x02;
+			else if (*argv[*i] == 'R')
+				ls->flag |= 0x04;
+			else if (*argv[*i] == 'r')
+				ls->flag |= 0x08;
+			else if (*argv[*i] == 't')
+				ls->flag |= 0x10;
+			else if (*argv[*i] == 'n')
+				ls->flag |= 0x20;
+			else if (*argv[*i] == 'G')
+				ls->flag |= 0x40;
+			else if (*argv[*i] == 'd')
+				ls->flag |= 0x80;
+			else
+				ft_usage(*argv[*i]);
+			++argv[*i];
+		}
+		++(*i);
 	}
 }

@@ -64,6 +64,7 @@ typedef struct	s_dir
 	size_t 			s_name;
 	size_t 			s_group;
 	size_t			s_size;
+	size_t			s_link;
 	struct s_dir	*next;
 	struct s_dir	*prev;
 }				t_dir;
@@ -80,7 +81,7 @@ typedef struct	s_ls
 }				t_ls;
 
 void			check_mode(t_info *file, unsigned int mode, char *permfile);
-void			check_flags(t_ls *ls, const char *flag);
+void			check_flags(t_ls *ls, char **argv, int *i);
 char			*ft_strjoin_dir(char const *s1, char const *s2);
 void			read_dir_info(t_ls *ls, const char *dir_name);
 t_info			*new_file(t_dir *dir);
@@ -88,5 +89,8 @@ t_dir			*new_dir(t_ls *ls, const char *name);
 void			free_lists(t_dir *head);
 void			sort_lists(t_ls *ls, t_dir *dir);
 void			check_file_or_dir(t_ls *ls, char *argv);
+void 			output_ln(t_info *file, t_ls *ls, t_dir *dir);
+void			output_just(t_dir *dir, char flag);
+void			output_errnfiles(t_ls *ls, t_info *file);
 
 #endif

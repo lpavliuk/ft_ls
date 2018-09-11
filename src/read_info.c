@@ -49,14 +49,16 @@ static inline void	read_file_info(t_ls *ls, t_dir *dir, t_info *file)
 	file->ctime = (size_t)ls->stat.st_ctime;
 	ft_strncpy(&file->data[0], ctime(&ls->stat.st_ctime), 24);
 	check_mode(file, ls->stat.st_mode, &file->mode[0]);
-	if (file->mode[0] == 'l')
-		find_link(file);
-	else if (file->mode[0] == 'c')
-		dir->s_size = 10;
-	n = ft_strlen(file->group->gr_name);
+	(file->mode[0] == 'l') ? find_link(file): 0;
+	(file->mode[0] == 'c') ? dir->s_size = 10 : 0;
+	n = ft_strlen(file->group->gr_name) + 1;
 	(n > dir->s_group) ? dir->s_group = n : 0;
 	n = ft_strlen(file->pwuid->pw_name);
 	(n > dir->s_name) ? dir->s_name = n : 0;
+	n = ft_count(file->size, 10) + 1;
+	(n > dir->s_size) ? dir->s_size = n : 0;
+	n = ft_count(file->nlinks, 10);
+	(n > dir->s_link) ? dir->s_link = n : 0;
 }
 
 void				read_dir_info(t_ls *ls, const char *dir_name)
