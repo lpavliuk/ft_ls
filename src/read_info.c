@@ -22,7 +22,6 @@ static inline void	find_link(t_info *file)
 	ft_bzero(buf, PATH_MAX);
 	size = readlink(file->pwd, buf, PATH_MAX);
 	buf[size] = '\0';
-	ft_printf("size: %zu | %s ---> %.*s\n", size, file->pwd, (int)size, buf);
 	tmp = file->name_file;
 	file->name_file = ft_strjoin(file->name_file, " -> ");
 	free(tmp);
@@ -32,12 +31,16 @@ static inline void	find_link(t_info *file)
 	free(buf);
 }
 
-static inline void	read_file_info(t_ls *ls, t_info *file)
+static inline void	read_file_info(t_ls *ls, t_dir *dir, t_info *file)
 {
+	size_t n;
+
 	lstat(file->pwd, &ls->stat);
 	file->nlinks = ls->stat.st_nlink;
 	file->uid = ls->stat.st_uid;
 	file->gid = ls->stat.st_gid;
+	file->group = getgrgid(file->gid);
+	file->pwuid = getpwuid(file->uid);
 	file->rdev = ls->stat.st_rdev;
 	file->blocks = ls->stat.st_blocks;
 	file->size = ls->stat.st_size;
@@ -48,6 +51,10 @@ static inline void	read_file_info(t_ls *ls, t_info *file)
 	check_mode(file, ls->stat.st_mode, &file->mode[0]);
 	if (file->mode[0] == 'l')
 		find_link(file);
+	n = ft_strlen(file->group->gr_name);
+	(n > dir->s_group) ? dir->s_group = n : 0;
+	n = ft_strlen(file->pwuid->pw_name);
+	(n > dir->s_name) ? dir->s_name = n : 0;
 }
 
 void				read_dir_info(t_ls *ls, const char *dir_name)
@@ -64,12 +71,15 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 	while ((ls->file = readdir(ls->fd_dir)))
 	{
 		if (!(ls->flag & FLAG_A) && ls->file->d_name[0] == '.')
-			continue ;
+		{
+			ft_printf("%x\n", ls->flag);
+			continue;
+		}
 		file = new_file(dir);
 		file->name_file = ft_strdup(ls->file->d_name);
 		file->pwd = ft_strjoin_dir(dir_name, file->name_file);
 		if (ls->flag & FLAG_L || ls->flag & FLAG_N || ls->flag & FLAG_T)
-			read_file_info(ls, file);
+			read_file_info(ls, dir, file);
 		dir->total += ls->stat.st_blocks;
 		ft_bzero(&ls->stat, sizeof(ls->stat));
 	}
@@ -79,7 +89,7 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 void				check_file_or_dir(t_ls *ls, char *argv)
 {
 	t_info	*file;
-	int 	num;
+	int		num;
 
 	num = lstat(argv, &ls->stat);
 	if (S_ISDIR(ls->stat.st_mode) && num >= 0)
@@ -91,7 +101,7 @@ void				check_file_or_dir(t_ls *ls, char *argv)
 		if (num < 0)
 			file->fail_file = 1;
 		else
-			read_file_info(ls, file);
+			read_file_info(ls, ls->files, file);
 		ft_bzero(&ls->stat, sizeof(ls->stat));
 	}
 }

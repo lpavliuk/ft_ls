@@ -48,6 +48,8 @@ typedef struct	s_info
 	size_t			atime;
 	size_t			mtime;
 	size_t			ctime;
+	struct passwd	*pwuid;
+	struct group	*group;
 	struct s_info	*next;
 	struct s_info	*prev;
 }				t_info;
@@ -59,6 +61,8 @@ typedef struct	s_dir
 	size_t			total;
 	t_info			*head;
 	t_info			*last_file;
+	size_t 			s_name;
+	size_t 			s_group;
 	struct s_dir	*next;
 	struct s_dir	*prev;
 }				t_dir;
@@ -68,7 +72,7 @@ typedef struct	s_ls
 	DIR				*fd_dir;
 	struct dirent	*file;
 	struct stat		stat;
-	unsigned char 	flag : 1;
+	unsigned char 	flag;
 	t_dir			*files;
 	t_dir			*dirs;
 	t_dir			*last_dir;

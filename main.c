@@ -79,6 +79,52 @@ static inline void	check_ls(t_ls *ls)
 /*****************************************************
 ******************************************************/
 
+void 	output_for_ln(t_info *file, t_ls *ls)
+{
+	t_info			*tmp;
+
+	tmp = file;
+	while (tmp)
+	{
+		if (!tmp->fail_file && ls->flag & FLAG_N)
+			ft_printf("%s%2d %-5d %-5d %6d %12.12s %s\n", tmp->mode, tmp->nlinks,
+			tmp->uid, tmp->gid, tmp->size, &tmp->data[4], tmp->name_file);
+		else if (!tmp->fail_file)
+			ft_printf("%s%2d %-*s %-*s %6d %12.12s %s\n",
+			tmp->mode, tmp->nlinks, ls->files->s_name, tmp->pwuid->pw_name,
+			ls->files->s_group, tmp->group->gr_name, tmp->size, &tmp->data[4],
+			tmp->name_file);
+		tmp = tmp->next;
+	}
+}
+
+void	output_errnfiles(t_ls *ls, t_info *file)
+{
+	t_info *tmp;
+
+	tmp = file;
+	while (tmp)
+	{
+		if (tmp->fail_file)
+			ft_printf("ls: %s: No such file or directory\n", tmp->name_file);
+		tmp = tmp->next;
+	}
+	if (ls->flag & FLAG_N || ls->flag & FLAG_L)
+		output_for_ln(file, ls);
+//	else
+//		output_just(file);
+}
+
+void	output_mode(t_ls *ls)
+{
+	output_errnfiles(ls, ls->files->head);
+//	if (ls->flag & FLAG_L || ls->flag & FLAG_N)
+//		output_tn(ls->dir);
+
+//	if (ls->flag & FLAG_R)
+//		recursion();
+}
+
 int		main(int argc, char **argv)
 {
 	t_ls	*ls;
@@ -99,6 +145,7 @@ int		main(int argc, char **argv)
 	else
 		read_dir_info(ls, ".");
 
+	check_ls(ls);
 	ft_printf("======> SORT!!! <======\n");
 	if (ls->files && ls->files->head)
 		sort_lists(ls, ls->files);
@@ -107,7 +154,7 @@ int		main(int argc, char **argv)
 
 	check_ls(ls);
 //	output(ls);
-
+	output_mode(ls);
 
 
 	free_lists(ls->dirs);

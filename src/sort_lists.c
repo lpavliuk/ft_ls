@@ -30,6 +30,7 @@ static inline void	sort_list_btime(t_dir *dir, t_info *first, t_info *last)
 			((first->ctime == first->next->ctime)
 			&& (ft_strcmp(first->name_file, first->next->name_file) < 0)))
 		{
+			(&first->ctime != &last->ctime) ? last = dir->last_file->prev : 0;
 			(&dir->head->size == &first->size) ? dir->head = first->next : 0;
 			swap_elem(first, first->next);
 			first = dir->head;
@@ -56,6 +57,8 @@ static inline void	sort_list_bname(t_dir *dir, t_info *first, t_info *last)
 	{
 		if (ft_strcmp(first->name_file, first->next->name_file) > 0)
 		{
+			(&first->name_file != &last->name_file)
+			? last = dir->last_file->prev : 0;
 			(&dir->head->size == &first->size) ? dir->head = first->next : 0;
 			swap_elem(first, first->next);
 			first = dir->head;
@@ -74,7 +77,7 @@ static inline void	sort_list_bname(t_dir *dir, t_info *first, t_info *last)
 	}
 }
 
-void	sort_lists(t_ls *ls, t_dir *dir)
+void				sort_lists(t_ls *ls, t_dir *dir)
 {
 	if (ls->flag & FLAG_T)
 		sort_list_btime(dir, dir->head, dir->last_file->prev);
