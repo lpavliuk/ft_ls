@@ -20,15 +20,11 @@ static inline void	check_acl_and_xattr(t_info *file, char *permfile)
 	acl = acl_get_link_np(file->pwd, ACL_TYPE_EXTENDED);
 	if (listxattr(file->pwd, NULL, 0, XATTR_NOFOLLOW) > 0)
 		permfile[10] = '@';
-	else if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &buf) == -1)
-		acl_free(acl);
-	else if (acl != NULL)
-	{
+	else if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &buf) != -1)
 		permfile[10] = '+';
-		acl_free(acl);
-	}
 	else
 		permfile[10] = ' ';
+	acl_free(acl);
 }
 
 static inline void	check_type(const unsigned int *mode, char *permfile)

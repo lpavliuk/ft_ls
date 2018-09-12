@@ -86,9 +86,11 @@ void			read_info(t_ls *ls, char *argv);
 void			read_dir_info(t_ls *ls, const char *dir_name);
 t_info			*new_file(t_dir *dir);
 t_dir			*new_dir(t_ls *ls, const char *name);
+void 			sort_argv(char **argv);
 void			sort_lists(t_ls *ls, t_dir *dir);
+void			output_mode(t_ls *ls);
+void			output_for(t_ls *ls, t_dir **next);
 void 			output_ln(t_info *file, t_ls *ls, t_dir *dir);
 void			output_just(t_dir *dir, char flag);
-void			output_errnfiles(t_ls *ls, t_info *file);
 
 #endif

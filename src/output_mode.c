@@ -12,7 +12,7 @@
 
 #include "../include/ls.h"
 
-void	output_ln(t_info *file, t_ls *ls, t_dir *dir)
+void				output_ln(t_info *file, t_ls *ls, t_dir *dir)
 {
 	while (file)
 	{
@@ -37,7 +37,7 @@ void	output_ln(t_info *file, t_ls *ls, t_dir *dir)
 	}
 }
 
-void	output_just(t_dir *dir, char flag)
+void				output_just(t_dir *dir, char flag)
 {
 	t_info *tmp;
 
@@ -50,7 +50,7 @@ void	output_just(t_dir *dir, char flag)
 	}
 }
 
-void	output_errnfiles(t_ls *ls, t_info *file)
+static inline void	output_errnfiles(t_ls *ls, t_info *file)
 {
 	t_info *tmp;
 
@@ -67,4 +67,53 @@ void	output_errnfiles(t_ls *ls, t_info *file)
 		output_ln(file, ls, ls->files);
 	else
 		output_just(ls->files, ls->flag);
+}
+
+void				output_for(t_ls *ls, t_dir **next)
+{
+	while (ls->dirs)
+	{
+		if (ls->dirs->head)
+			sort_lists(ls, ls->dirs);
+		if (*next)
+			ft_printf("%s:\n", ls->dirs->name);
+		if (ls->dirs->close)
+			ft_printf("ls: %s: Permission denied\n", ls->dirs->name);
+		else if (ls->flag & FLAG_N || ls->flag & FLAG_L)
+			ft_printf("total %d\n", ls->dirs->total);
+		if (ls->dirs->head && ls->flag & FLAG_RR &&
+			(ls->flag & FLAG_N || ls->flag & FLAG_L))
+			output_ln(ls->dirs->last_file, ls, ls->dirs);
+		else if (ls->flag & FLAG_N || ls->flag & FLAG_L)
+			output_ln(ls->dirs->head, ls, ls->dirs);
+		else
+			output_just(ls->dirs, ls->flag);
+		if (ls->dirs->next)
+			write(1, "\n", 1);
+		ls->dirs = (ls->flag & FLAG_RR) ? ls->dirs->prev : ls->dirs->next;
+	}
+}
+
+void				output_mode(t_ls *ls)
+{
+//	t_dir *tmp;
+
+	if (ls->files->head)
+		output_errnfiles(ls, ls->files->head);
+	if (ls->files->head && ls->dirs)
+		write(1, "\n", 1);
+	output_for(ls, &ls->dirs->next);
+//	else
+//	{
+//		tmp = (ls->flag & FLAG_RR) ? ls->dirs->last_file : ls->dirs->head;
+//		while (tmp)
+//		{
+//			if (tmp->head)
+//				sort_lists(ls, tmp);
+//			output_just(tmp, ls->flag);
+//			ls->dirs = ls->dirs->next;
+//		}
+//	}
+//	if (ls->flag & FLAG_R)
+//		recursion();
 }

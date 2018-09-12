@@ -84,3 +84,22 @@ void				sort_lists(t_ls *ls, t_dir *dir)
 	else
 		sort_list_bname(dir, dir->head, dir->last_file->prev);
 }
+
+void 				sort_argv(char **argv)
+{
+	char 	*tmp;
+	int 	i;
+
+	i = 1;
+	while (argv[i] && argv[i + 1])
+	{
+		if (ft_strcmp(argv[i], argv[i + 1]) > 0)
+		{
+			tmp = argv[i];
+			argv[i] = argv[i + 1];
+			argv[i + 1] = tmp;
+			i = 0;
+		}
+		++i;
+	}
+}

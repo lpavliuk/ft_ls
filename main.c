@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <zconf.h>
 #include "include/ls.h"
 
 /**************** CHECK LS->HEAD **********************/
@@ -80,40 +81,6 @@ static inline void	check_ls(t_ls *ls)
 /*****************************************************
 ******************************************************/
 
-void	output_mode(t_ls *ls, t_dir **next)
-{
-	if (ls->files->head)
-		output_errnfiles(ls, ls->files->head);
-	if (ls->flag & FLAG_L || ls->flag & FLAG_N)
-	{
-		while (ls->dirs)
-		{
-			if (ls->dirs->head)
-				sort_lists(ls, ls->dirs);
-			if (*next)
-				ft_printf("%s:\n", ls->dirs->name);
-			ft_printf("total %d\n", ls->dirs->total);
-			if (ls->dirs->head && ls->flag & FLAG_RR)
-				output_ln(ls->dirs->last_file, ls, ls->dirs);
-			else
-				output_ln(ls->dirs->head, ls, ls->dirs);
-			if (ls->dirs->next)
-				write(1, "\n", 1);
-			ls->dirs = ls->dirs->next;
-		}
-	}
-	else
-	{
-		while (ls->dirs)
-		{
-			output_just(ls->dirs, ls->flag);
-			ls->dirs = ls->dirs->next;
-		}
-	}
-//	if (ls->flag & FLAG_R)
-//		recursion();
-}
-
 int		main(int argc, char **argv)
 {
 	t_ls	*ls;
@@ -128,6 +95,7 @@ int		main(int argc, char **argv)
 		check_flags(ls, argv, &i);
 	if ((argc > 1 && i < argc && !ls->flag && ++i) || (argc > 2 && ls->flag))
 	{
+		sort_argv(argv);
 		while (i < argc)
 			read_info(ls, argv[i++]);
 	}
@@ -136,12 +104,10 @@ int		main(int argc, char **argv)
 
 //	check_ls(ls);
 //	ft_printf("======> SORT!!! <======\n");
-	if (ls->files && ls->files->head)
-		sort_lists(ls, ls->files);
 	check_ls(ls);
 	ft_printf("---------------------------------------\n");
 
-	output_mode(ls, &ls->dirs->next);
+	output_mode(ls);
 
 //	system("leaks a.out");
 	return (0);
