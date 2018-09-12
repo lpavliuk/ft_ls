@@ -15,9 +15,10 @@
 static inline void	check_time(t_info *file)
 {
 	time_t	current;
-	char 	*str;
+	char	*str;
 
 	current = time(NULL);
+	ft_strncpy(&file->data[0], ctime(&file->mtime), 24);
 	if (current - file->mtime > 15778463 || current < file->mtime)
 	{
 		str = ft_strdup(file->data);
@@ -63,7 +64,6 @@ static inline void	read_file_info(t_ls *ls, t_dir *dir, t_info *file)
 	file->rdev = ls->stat.st_rdev;
 	file->size = ls->stat.st_size;
 	file->mtime = (size_t)ls->stat.st_mtime;
-	ft_strncpy(&file->data[0], ctime(&ls->stat.st_mtime), 24);
 	check_mode(file, ls->stat.st_mode, &file->mode[0]);
 	(file->mode[0] == 'l') ? find_link(file) : 0;
 	(file->mode[0] == 'c') ? dir->s_size = 8 : 0;
@@ -110,16 +110,11 @@ void				read_info(t_ls *ls, char *argv)
 	int		num;
 
 	num = lstat(argv, &ls->stat);
-	if (S_ISDIR(ls->stat.st_mode) && num >= 0 && !(ls->flag & FLAG_D))
-		read_dir_info(ls, argv);
+	file = new_file(ls->files);
+	file->name_file = ft_strdup(argv);
+	if (num < 0)
+		file->fail_file = 1;
 	else
-	{
-		file = new_file(ls->files);
-		file->name_file = ft_strdup(argv);
-		if (num < 0)
-			file->fail_file = 1;
-		else
-			read_file_info(ls, ls->files, file);
-		ft_bzero(&ls->stat, sizeof(ls->stat));
-	}
+		read_file_info(ls, ls->files, file);
+	ft_bzero(&ls->stat, sizeof(ls->stat));
 }

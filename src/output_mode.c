@@ -59,6 +59,8 @@ static inline void	output_errnfiles(t_ls *ls, t_info *file)
 	{
 		if (tmp->fail_file)
 			ft_printf("ls: %s: No such file or directory\n", tmp->name_file);
+		else if (tmp->mode[0] == 'd' && !(ls->flag & FLAG_D))
+			tmp->fail_file = 1;
 		tmp = tmp->next;
 	}
 	if ((ls->flag & FLAG_N || ls->flag & FLAG_L) && ls->flag & FLAG_RR)
@@ -96,24 +98,11 @@ void				output_for(t_ls *ls, t_dir **next)
 
 void				output_mode(t_ls *ls)
 {
-//	t_dir *tmp;
-
 	if (ls->files->head)
 		output_errnfiles(ls, ls->files->head);
-	if (ls->files->head && ls->dirs)
+	if (ls->files->head && ls->files->head->mode[0] != 'd' && ls->dirs)
 		write(1, "\n", 1);
 	output_for(ls, &ls->dirs->next);
-//	else
-//	{
-//		tmp = (ls->flag & FLAG_RR) ? ls->dirs->last_file : ls->dirs->head;
-//		while (tmp)
-//		{
-//			if (tmp->head)
-//				sort_lists(ls, tmp);
-//			output_just(tmp, ls->flag);
-//			ls->dirs = ls->dirs->next;
-//		}
-//	}
 //	if (ls->flag & FLAG_R)
 //		recursion();
 }

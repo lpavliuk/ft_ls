@@ -35,8 +35,8 @@ static inline void	check_head(t_info *head)
 //		ft_printf("file->gid:[{white}   %u   {eoc}]\n", head->gid);
 //		ft_printf("file->group:[{yellow}   %s   {eoc}]\n", group->gr_name);
 //		ft_printf("file->size:[{red} %u   {eoc}]\n", head->size);
-		ft_printf("ctime:[ %llu  ]\n", head->mtime);
-		ft_printf("file->data:[{pink}  %s  {eoc}]\n", head->data);
+//		ft_printf("ctime:[ %zu  ]\n", head->mtime);
+//		ft_printf("file->data:[{pink}  %s  {eoc}]\n", head->data);
 		head = head->next;
 	}
 }
@@ -81,6 +81,16 @@ static inline void	check_ls(t_ls *ls)
 /*****************************************************
 ******************************************************/
 
+void 	check_dir(t_ls *ls, t_info *file)
+{
+	while (file)
+	{
+		if (file->mode[0] == 'd' && !(ls->flag & FLAG_D))
+			read_dir_info(ls, file->name_file);
+		file = file->next;
+	}
+}
+
 int		main(int argc, char **argv)
 {
 	t_ls	*ls;
@@ -91,19 +101,18 @@ int		main(int argc, char **argv)
 	ft_bzero(ls, sizeof(t_ls));
 	ls->files = (t_dir *)malloc(sizeof(t_dir));
 	ft_bzero(ls->files, sizeof(t_dir));
-	if (argc > 1 && argv[1][0] == '-')
+	if (argc > 1 && argv[1][0] == '-' && argv[1][1])
 		check_flags(ls, argv, &i);
-	if ((argc > 1 && i < argc && !ls->flag && ++i) || (argc > 2 && ls->flag))
+	if ((argc > 1 && i < argc && !ls->flag && ++i) || (argc > i && ls->flag))
 	{
-		sort_argv(argv);
 		while (i < argc)
 			read_info(ls, argv[i++]);
+		sort_lists(ls, ls->files);
+		check_dir(ls, ls->files->head);
 	}
 	else
 		read_dir_info(ls, ".");
 
-//	check_ls(ls);
-//	ft_printf("======> SORT!!! <======\n");
 	check_ls(ls);
 	ft_printf("---------------------------------------\n");
 
