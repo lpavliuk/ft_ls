@@ -102,7 +102,14 @@ void	output_mode(t_ls *ls, t_dir **next)
 			ls->dirs = ls->dirs->next;
 		}
 	}
-//	else
+	else
+	{
+		while (ls->dirs)
+		{
+			output_just(ls->dirs, ls->flag);
+			ls->dirs = ls->dirs->next;
+		}
+	}
 //	if (ls->flag & FLAG_R)
 //		recursion();
 }
@@ -119,9 +126,11 @@ int		main(int argc, char **argv)
 	ft_bzero(ls->files, sizeof(t_dir));
 	if (argc > 1 && argv[1][0] == '-')
 		check_flags(ls, argv, &i);
-	if ((argc > 1 && i < argc && !ls->flag) || (argc > 2 && ls->flag))
+	if ((argc > 1 && i < argc && !ls->flag && ++i) || (argc > 2 && ls->flag))
+	{
 		while (i < argc)
 			read_info(ls, argv[i++]);
+	}
 	else
 		read_dir_info(ls, ".");
 

@@ -26,9 +26,9 @@ static inline void	sort_list_btime(t_dir *dir, t_info *first, t_info *last)
 {
 	while (first->next && last->prev)
 	{
-		if ((first->ctime > first->next->ctime) ||
+		if ((first->ctime < first->next->ctime) ||
 			((first->ctime == first->next->ctime)
-			&& (ft_strcmp(first->name_file, first->next->name_file) < 0)))
+			&& (ft_strcmp(first->name_file, first->next->name_file) > 0)))
 		{
 			(&first->ctime != &last->ctime) ? last = dir->last_file->prev : 0;
 			(&dir->head->size == &first->size) ? dir->head = first->next : 0;
@@ -36,9 +36,9 @@ static inline void	sort_list_btime(t_dir *dir, t_info *first, t_info *last)
 			first = dir->head;
 			continue ;
 		}
-		if ((last->ctime > last->next->ctime) ||
+		if ((last->ctime < last->next->ctime) ||
 			((last->ctime == last->next->ctime)
-			&& (ft_strcmp(last->name_file, last->next->name_file) < 0)))
+			&& (ft_strcmp(last->name_file, last->next->name_file) > 0)))
 		{
 			(&dir->last_file->size == &last->next->size)
 			? dir->last_file = last : 0;
