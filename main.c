@@ -27,7 +27,7 @@ static inline void	check_head(t_info *head)
 //        ft_printf("file->rdev:[{white}   %u   {eoc}]\n", head->rdev);
 //		ft_printf("file->blocks:[{pink}   %u   {eoc}]\n", head->blocks);
 		ft_printf("file->name:[{green}  %s   {eoc}]\n", head->name_file);
-		ft_printf("%d\n", head->fail_file);
+//		ft_printf("%d\n", head->fail_file);
 //		ft_printf("file->mode:[{blue}   %s  {eoc}]\n", head->mode);
 //		ft_printf("file->nlinks:[{white}   %u   {eoc}]\n", head->nlinks);
 //		ft_printf("file->uid:[{white}   %u   {eoc}]\n", head->uid);
@@ -35,8 +35,8 @@ static inline void	check_head(t_info *head)
 //		ft_printf("file->gid:[{white}   %u   {eoc}]\n", head->gid);
 //		ft_printf("file->group:[{yellow}   %s   {eoc}]\n", group->gr_name);
 //		ft_printf("file->size:[{red} %u   {eoc}]\n", head->size);
-//		ft_printf("ctime:[ %u  ]\n", head->ctime);
-//		ft_printf("file->data:[{pink}  %s  {eoc}]\n", head->data);
+		ft_printf("ctime:[ %llu  ]\n", head->mtime);
+		ft_printf("file->data:[{pink}  %s  {eoc}]\n", head->data);
 		head = head->next;
 	}
 }

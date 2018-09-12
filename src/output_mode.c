@@ -19,16 +19,16 @@ void				output_ln(t_info *file, t_ls *ls, t_dir *dir)
 		if (!file->fail_file)
 		{
 			if (ls->flag & FLAG_N)
-				ft_printf("%s %*d %-5d %-5d %*d %12.12s %s\n", file->mode,
+				ft_printf("%s %*d %-5d %-5d %*d %-12.12s %s\n", file->mode,
 				dir->s_link, file->nlinks, file->uid, file->gid, dir->s_size,
 				file->size, &file->data[4], file->name_file);
 			else if (file->mode[0] == 'c' || file->mode[0] == 'b')
-				ft_printf("%s %*d %-*s %-*s %3d, %3d %12.12s %s\n", file->mode,
+				ft_printf("%s %*d %-*s %-*s %3d, %3d %-12.12s %s\n", file->mode,
 				dir->s_link, file->nlinks, dir->s_name, file->name_user,
 				dir->s_group, file->name_group, major(file->rdev),
 				minor(file->rdev), &file->data[4], file->name_file);
 			else
-				ft_printf("%s %*d %-*s %-*s %*d %12.12s %s\n", file->mode,
+				ft_printf("%s %*d %-*s %-*s %*d %-12.12s %s\n", file->mode,
 				dir->s_link, file->nlinks, dir->s_name, file->name_user,
 				dir->s_group, file->name_group, dir->s_size, file->size,
 				&file->data[4], file->name_file);

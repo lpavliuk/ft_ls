@@ -46,7 +46,7 @@ typedef struct	s_info
 	off_t			size;
 	uid_t			uid;
 	gid_t			gid;
-	size_t			ctime;
+	time_t			mtime;
 	struct passwd	*pwuid;
 	struct group	*group;
 	struct s_info	*next;

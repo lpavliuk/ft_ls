@@ -12,6 +12,23 @@
 
 #include "../include/ls.h"
 
+static inline void	check_time(t_info *file)
+{
+	time_t	current;
+	char 	*str;
+
+	current = time(NULL);
+	if (current - file->mtime > 15778463 || current < file->mtime)
+	{
+		str = ft_strdup(file->data);
+		ft_bzero(file->data, 25);
+		ft_strncpy(&file->data[0], str, 10);
+		file->data[10] = ' ';
+		ft_strncpy(&file->data[11], &str[19], 5);
+		free(str);
+	}
+}
+
 static inline void	find_link(t_info *file)
 {
 	char	*tmp;
@@ -45,8 +62,8 @@ static inline void	read_file_info(t_ls *ls, t_dir *dir, t_info *file)
 	file->name_user = ft_strdup(file->pwuid->pw_name);
 	file->rdev = ls->stat.st_rdev;
 	file->size = ls->stat.st_size;
-	file->ctime = (size_t)ls->stat.st_ctime;
-	ft_strncpy(&file->data[0], ctime(&ls->stat.st_ctime), 24);
+	file->mtime = (size_t)ls->stat.st_mtime;
+	ft_strncpy(&file->data[0], ctime(&ls->stat.st_mtime), 24);
 	check_mode(file, ls->stat.st_mode, &file->mode[0]);
 	(file->mode[0] == 'l') ? find_link(file) : 0;
 	(file->mode[0] == 'c') ? dir->s_size = 8 : 0;
@@ -58,6 +75,7 @@ static inline void	read_file_info(t_ls *ls, t_dir *dir, t_info *file)
 	(n > dir->s_size) ? dir->s_size = n : 0;
 	n = ft_count(file->nlinks, 10);
 	(n > dir->s_link) ? dir->s_link = n : 0;
+	check_time(file);
 }
 
 void				read_dir_info(t_ls *ls, const char *dir_name)
