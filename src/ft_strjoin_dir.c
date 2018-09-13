@@ -26,7 +26,8 @@ char	*ft_strjoin_dir(char const *s1, char const *s2)
 	ft_bzero(d, (ft_strlen(s1) + ft_strlen(s2) + 2));
 	while (*s1 != '\0')
 		*d++ = *s1++;
-	*d++ = '/';
+	if (*(s1 - 1) != '/')
+		*d++ = '/';
 	while (*s2 != '\0')
 		*d++ = *s2++;
 	*d = '\0';

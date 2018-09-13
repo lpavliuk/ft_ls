@@ -94,4 +94,5 @@ void			output_for(t_ls *ls, t_dir *dir, t_dir **next);
 void 			output_ln(t_info *file, t_ls *ls, t_dir *dir);
 void			output_just(t_dir *dir, char flag);
 
+void	check_ls(t_ls *ls);
 #endif

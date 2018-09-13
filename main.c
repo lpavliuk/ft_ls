@@ -14,82 +14,84 @@
 #include "include/ls.h"
 
 /**************** CHECK LS->HEAD **********************/
-static inline void	check_head(t_info *head)
-{
-	struct passwd	*pwuid;
-	struct group	*group;
-
-	while (head)
-	{
-		group = getgrgid(head->gid);
-		pwuid = getpwuid(head->uid);
-//		ft_printf("===============================================\n");
-//        ft_printf("file->rdev:[{white}   %u   {eoc}]\n", head->rdev);
-//		ft_printf("file->blocks:[{pink}   %u   {eoc}]\n", head->blocks);
-		ft_printf("file->name:[{green}  %s   {eoc}]\n", head->name_file);
-//		ft_printf("%d\n", head->fail_file);
-//		ft_printf("file->mode:[{blue}   %s  {eoc}]\n", head->mode);
-//		ft_printf("file->nlinks:[{white}   %u   {eoc}]\n", head->nlinks);
-//		ft_printf("file->uid:[{white}   %u   {eoc}]\n", head->uid);
-//		ft_printf("file->user:[{yellow}   %s   {eoc}]\n", pwuid->pw_name);
-//		ft_printf("file->gid:[{white}   %u   {eoc}]\n", head->gid);
-//		ft_printf("file->group:[{yellow}   %s   {eoc}]\n", group->gr_name);
-//		ft_printf("file->size:[{red} %u   {eoc}]\n", head->size);
-//		ft_printf("ctime:[ %zu  ]\n", head->mtime);
-//		ft_printf("file->data:[{pink}  %s  {eoc}]\n", head->data);
-		head = head->next;
-	}
-}
-
-static inline void	check_ls(t_ls *ls)
-{
-	t_dir	*dir;
-//	t_info 	*tmp1;
-//	t_info 	*tmp2;
+//static inline void	check_head(t_info *head)
+//{
+//	struct passwd	*pwuid;
+//	struct group	*group;
 //
-//	tmp1 = ls->files->head;
-//	while (tmp1)
+//	while (head)
 //	{
-//		if (tmp1->fail_file)
-//			ft_printf("ls: %s: No such file or directory\n", tmp1->name_file);
-//		tmp1 = tmp1->next;
+//		group = getgrgid(head->gid);
+//		pwuid = getpwuid(head->uid);
+////		ft_printf("===============================================\n");
+////        ft_printf("file->rdev:[{white}   %u   {eoc}]\n", head->rdev);
+////		ft_printf("file->blocks:[{pink}   %u   {eoc}]\n", head->blocks);
+//		ft_printf("file->name:[{green}  %s   {eoc}]\n", head->name_file);
+////		ft_printf("%d\n", head->fail_file);
+////		ft_printf("file->mode:[{blue}   %s  {eoc}]\n", head->mode);
+////		ft_printf("file->nlinks:[{white}   %u   {eoc}]\n", head->nlinks);
+////		ft_printf("file->uid:[{white}   %u   {eoc}]\n", head->uid);
+////		ft_printf("file->user:[{yellow}   %s   {eoc}]\n", pwuid->pw_name);
+////		ft_printf("file->gid:[{white}   %u   {eoc}]\n", head->gid);
+////		ft_printf("file->group:[{yellow}   %s   {eoc}]\n", group->gr_name);
+////		ft_printf("file->size:[{red} %u   {eoc}]\n", head->size);
+////		ft_printf("ctime:[ %zu  ]\n", head->mtime);
+////		ft_printf("file->data:[{pink}  %s  {eoc}]\n", head->data);
+//		head = head->next;
+//	}
+//}
+//
+//void	check_ls(t_ls *ls)
+//{
+//	t_dir	*dir;
+////	t_info 	*tmp1;
+////	t_info 	*tmp2;
+////
+////	tmp1 = ls->files->head;
+////	while (tmp1)
+////	{
+////		if (tmp1->fail_file)
+////			ft_printf("ls: %s: No such file or directory\n", tmp1->name_file);
+////		tmp1 = tmp1->next;
+////	}
+////
+////	tmp2 = ls->files->head;
+////	while (tmp2)
+////	{
+////		if (!tmp2->fail_file)
+////			ft_printf("file->name:[{green}  %s   {eoc}]\n", tmp2->name_file);
+////		tmp2 = tmp2->next;
+////	}
+//
+//	dir = ls->dirs;
+//	while (dir)
+//	{
+//		if (!dir->close)
+//		{
+//			ft_printf("\n%s:\n", dir->name);
+//			ft_printf("ls->total:[{green}  %u  {eoc}]\n", dir->total);
+//			check_head(dir->head);
+//		}
+//		else
+//			ft_printf("\n%s:\nls: %s: Permission denied\n", dir->name, dir->name);
+//		dir = dir->next;
 //	}
 //
-//	tmp2 = ls->files->head;
-//	while (tmp2)
-//	{
-//		if (!tmp2->fail_file)
-//			ft_printf("file->name:[{green}  %s   {eoc}]\n", tmp2->name_file);
-//		tmp2 = tmp2->next;
-//	}
-
-	dir = ls->dirs;
-	while (dir)
-	{
-		if (!dir->close)
-		{
-			ft_printf("\n%s:\n", dir->name);
-			ft_printf("ls->total:[{green}  %u  {eoc}]\n", dir->total);
-			check_head(dir->head);
-		}
-		else
-			ft_printf("\n%s:\nls: %s: Permission denied\n", dir->name, dir->name);
-		dir = dir->next;
-	}
-
-}
+//}
 /*****************************************************
 ******************************************************/
 
-void 	info_dir(t_ls *ls, t_dir *direct, t_info *file)
+void 	info_dir(t_ls *ls, t_dir *direct)
 {
-	t_dir *dir;
+	t_info	*file;
+	t_dir	*dir;
 
+	if (&ls->dirs->name != &direct->name)
+		ft_printf("%s:\n", direct->name);
 	if (direct->head)
 		sort_lists(ls, direct);
-	ft_printf("%s:\n", direct->name);
 	if (direct->close)
-		ft_printf("ls: %s: Permission denied\n", direct->name);
+		ft_printf("ls: %s: Permission denied\n", &direct->name[2]);
 	else if ((ls->flag & FLAG_N || ls->flag & FLAG_L) && direct->head)
 		ft_printf("total %d\n", direct->total);
 	if (direct->head && ls->flag & FLAG_RR &&
@@ -99,14 +101,16 @@ void 	info_dir(t_ls *ls, t_dir *direct, t_info *file)
 		output_ln(direct->head, ls, direct);
 	else
 		output_just(direct, ls->flag);
+	file = (ls->flag & FLAG_RR) ? direct->last_file : direct->head;
 	while (file)
 	{
-		if (file->mode[0] == 'd')
+		if (file->mode[0] == 'd' && ft_strcmp(file->name_file, ".") != 0
+		&& ft_strcmp(file->name_file, "..") != 0)
 		{
 			read_dir_info(ls, file->pwd);
 			dir = ls->last_dir;
 			write(1, "\n", 1);
-			info_dir(ls, dir, dir->head);
+			info_dir(ls, dir);
 		}
 		file = (ls->flag & FLAG_RR) ? file->prev : file->next;
 	}
@@ -114,9 +118,14 @@ void 	info_dir(t_ls *ls, t_dir *direct, t_info *file)
 
 void 	recursion(t_ls *ls, t_dir *dir)
 {
+	t_dir *last;
+
+	last = ls->last_dir;
 	while (dir)
 	{
-		info_dir(ls, dir, dir->head);
+		info_dir(ls, dir);
+		if (&last->name == &dir->name)
+			break;
 		write(1, "\n", 1);
 		dir = dir->next;
 	}
@@ -154,8 +163,8 @@ int		main(int argc, char **argv)
 	else
 		read_dir_info(ls, ".");
 
-	check_ls(ls);
-	ft_printf("---------------------------------------\n");
+//	check_ls(ls);
+//	ft_printf("---------------------------------------\n");
 
 	output_mode(ls);
 
