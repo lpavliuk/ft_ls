@@ -35,7 +35,7 @@ static inline void	sort_list_btime(t_dir *dir)
 		{
 			if ((tmp->mtime < tmp->next->mtime) ||
 				((tmp->mtime == tmp->next->mtime)
-				 && (ft_strcmp(tmp->name_file, tmp->next->name_file) > 0)))
+				&& (ft_strcmp(tmp->name_file, tmp->next->name_file) > 0)))
 			{
 				(&dir->head->size == &tmp->size) ? dir->head = tmp->next : 0;
 				swap_elem(tmp, tmp->next);

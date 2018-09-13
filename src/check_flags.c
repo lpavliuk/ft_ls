@@ -21,7 +21,7 @@ static inline void	ft_usage(const char flag)
 
 void				check_flags(t_ls *ls, char **argv, int *i)
 {
-	while (argv[++(*i)] && argv[*i][0] == '-' && ++argv[*i])
+	while (argv[++(*i)] && argv[*i][0] == '-' && argv[*i][1] && ++argv[*i])
 	{
 		while (*argv[*i] && *argv[*i] != '\0')
 		{

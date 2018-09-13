@@ -81,6 +81,13 @@
 /*****************************************************
 ******************************************************/
 
+void 	ft_error(char *str)
+{
+	write(2, "ft_ls: ", 7);
+	write(2, str, ft_strlen(str));
+	write(2, ": Permission denied\n", 20);
+}
+
 void 	info_dir(t_ls *ls, t_dir *direct)
 {
 	t_info	*file;
@@ -91,7 +98,7 @@ void 	info_dir(t_ls *ls, t_dir *direct)
 	if (direct->head)
 		sort_lists(ls, direct);
 	if (direct->close)
-		ft_printf("ls: %s: Permission denied\n", &direct->name[2]);
+		ft_error(direct->name);
 	else if ((ls->flag & FLAG_N || ls->flag & FLAG_L) && direct->head)
 		ft_printf("total %d\n", direct->total);
 	if (direct->head && ls->flag & FLAG_RR &&
