@@ -80,6 +80,7 @@ typedef struct	s_ls
 	t_dir			*last_dir;
 }				t_ls;
 
+void 			recursion(t_ls *ls, t_dir *dir);
 void			check_mode(t_info *file, unsigned int mode, char *permfile);
 void			check_flags(t_ls *ls, char **argv, int *i);
 char			*ft_strjoin_dir(char const *s1, char const *s2);

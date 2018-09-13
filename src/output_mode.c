@@ -113,10 +113,10 @@ void				output_mode(t_ls *ls)
 		output_errnfiles(ls, ls->files->head, &files);
 	if (ls->files->head && files && ls->dirs)
 		write(1, "\n", 1);
-	if (ls->flag & FLAG_RR)
+	if (ls->flag & FLAG_R)
+		recursion(ls, ls->dirs);
+	else if (ls->flag & FLAG_RR)
 		output_for(ls, ls->last_dir, &ls->last_dir->prev);
 	else
 		output_for(ls, ls->dirs, &ls->dirs->next);
-//	if (ls->flag & FLAG_R)
-//		recursion();
 }

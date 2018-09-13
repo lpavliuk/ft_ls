@@ -44,24 +44,24 @@ static inline void	check_head(t_info *head)
 static inline void	check_ls(t_ls *ls)
 {
 	t_dir	*dir;
-	t_info 	*tmp1;
-	t_info 	*tmp2;
-
-	tmp1 = ls->files->head;
-	while (tmp1)
-	{
-		if (tmp1->fail_file)
-			ft_printf("ls: %s: No such file or directory\n", tmp1->name_file);
-		tmp1 = tmp1->next;
-	}
-
-	tmp2 = ls->files->head;
-	while (tmp2)
-	{
-		if (!tmp2->fail_file)
-			ft_printf("file->name:[{green}  %s   {eoc}]\n", tmp2->name_file);
-		tmp2 = tmp2->next;
-	}
+//	t_info 	*tmp1;
+//	t_info 	*tmp2;
+//
+//	tmp1 = ls->files->head;
+//	while (tmp1)
+//	{
+//		if (tmp1->fail_file)
+//			ft_printf("ls: %s: No such file or directory\n", tmp1->name_file);
+//		tmp1 = tmp1->next;
+//	}
+//
+//	tmp2 = ls->files->head;
+//	while (tmp2)
+//	{
+//		if (!tmp2->fail_file)
+//			ft_printf("file->name:[{green}  %s   {eoc}]\n", tmp2->name_file);
+//		tmp2 = tmp2->next;
+//	}
 
 	dir = ls->dirs;
 	while (dir)
@@ -80,6 +80,47 @@ static inline void	check_ls(t_ls *ls)
 }
 /*****************************************************
 ******************************************************/
+
+void 	info_dir(t_ls *ls, t_dir *direct, t_info *file)
+{
+	t_dir *dir;
+
+	if (direct->head)
+		sort_lists(ls, direct);
+	ft_printf("%s:\n", direct->name);
+	if (direct->close)
+		ft_printf("ls: %s: Permission denied\n", direct->name);
+	else if ((ls->flag & FLAG_N || ls->flag & FLAG_L) && direct->head)
+		ft_printf("total %d\n", direct->total);
+	if (direct->head && ls->flag & FLAG_RR &&
+		(ls->flag & FLAG_N || ls->flag & FLAG_L))
+		output_ln(direct->last_file, ls, direct);
+	else if (ls->flag & FLAG_N || ls->flag & FLAG_L)
+		output_ln(direct->head, ls, direct);
+	else
+		output_just(direct, ls->flag);
+	while (file)
+	{
+		if (file->mode[0] == 'd')
+		{
+			read_dir_info(ls, file->pwd);
+			dir = ls->last_dir;
+			write(1, "\n", 1);
+			info_dir(ls, dir, dir->head);
+		}
+		file = (ls->flag & FLAG_RR) ? file->prev : file->next;
+	}
+}
+
+void 	recursion(t_ls *ls, t_dir *dir)
+{
+	while (dir)
+	{
+		info_dir(ls, dir, dir->head);
+		write(1, "\n", 1);
+		dir = dir->next;
+	}
+}
 
 void 	check_dir(t_ls *ls, t_info *file)
 {
