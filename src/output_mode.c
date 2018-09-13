@@ -56,7 +56,7 @@ void				output_just(t_dir *dir, char flag)
 	}
 }
 
-static inline void	output_errnfiles(t_ls *ls, t_info *file)
+static inline void	output_errnfiles(t_ls *ls, t_info *file, int *files)
 {
 	t_info *tmp;
 
@@ -67,6 +67,8 @@ static inline void	output_errnfiles(t_ls *ls, t_info *file)
 			ft_printf("ls: %s: No such file or directory\n", tmp->name_file);
 		else if (tmp->mode[0] == 'd' && !(ls->flag & FLAG_D))
 			tmp->fail_file = 1;
+		else
+			*files = 1;
 		tmp = tmp->next;
 	}
 	if ((ls->flag & FLAG_N || ls->flag & FLAG_L) && ls->flag & FLAG_RR)
@@ -81,8 +83,6 @@ void				output_for(t_ls *ls, t_dir *dir, t_dir **next)
 {
 	while (dir)
 	{
-		ft_printf("===> %s\n", dir->name);
-		ft_printf("==> %d\n", (ls->flag & FLAG_RR));
 		if (dir->head)
 			sort_lists(ls, dir);
 		if (*next)
@@ -98,17 +98,20 @@ void				output_for(t_ls *ls, t_dir *dir, t_dir **next)
 			output_ln(dir->head, ls, dir);
 		else
 			output_just(dir, ls->flag);
-		if (dir->next)
-			write(1, "\n", 1);
+		(dir->prev && ls->flag & FLAG_RR) ? write(1, "\n", 1) : 0;
+		(dir->next && !(ls->flag & FLAG_RR)) ? write(1, "\n", 1) : 0;
 		dir = (ls->flag & FLAG_RR) ? dir->prev : dir->next;
 	}
 }
 
 void				output_mode(t_ls *ls)
 {
+	int	files;
+
+	files = 0;
 	if (ls->files->head)
-		output_errnfiles(ls, ls->files->head);
-	if (ls->files->head && ls->files->head->mode[0] != 'd' && ls->dirs)
+		output_errnfiles(ls, ls->files->head, &files);
+	if (ls->files->head && files && ls->dirs)
 		write(1, "\n", 1);
 	if (ls->flag & FLAG_RR)
 		output_for(ls, ls->last_dir, &ls->last_dir->prev);

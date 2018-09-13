@@ -97,7 +97,7 @@ void				read_dir_info(t_ls *ls, const char *dir_name)
 		file->name_file = ft_strdup(ls->file->d_name);
 		file->pwd = ft_strjoin_dir(dir_name, file->name_file);
 		if (ls->flag & FLAG_L || ls->flag & FLAG_N
-		|| ls->flag & FLAG_T || ls->flag & FLAG_G )
+		|| ls->flag & FLAG_T || ls->flag & FLAG_G)
 			read_file_info(ls, dir, file);
 		dir->total += ls->stat.st_blocks;
 		ft_bzero(&ls->stat, sizeof(ls->stat));

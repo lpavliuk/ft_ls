@@ -19,8 +19,8 @@ t_dir	*new_dir(t_ls *ls, const char *name)
 		ls->dirs = (t_dir *)malloc(sizeof(t_dir));
 		ft_bzero(ls->dirs, sizeof(t_dir));
 		(ls->dirs)->name = ft_strdup(name);
-		ls->last_dir = ls->dirs;
 		ls->dirs->prev = NULL;
+		ls->last_dir = ls->dirs;
 		return (ls->dirs);
 	}
 	else
@@ -41,7 +41,7 @@ t_info	*new_file(t_dir *dir)
 		dir->head = (t_info *)malloc(sizeof(t_info));
 		ft_bzero(dir->head, sizeof(t_info));
 		dir->last_file = dir->head;
-		dir->prev = NULL;
+		dir->last_file->prev = NULL;
 		return (dir->head);
 	}
 	else
