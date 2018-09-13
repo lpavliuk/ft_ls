@@ -41,6 +41,7 @@ typedef struct	s_info
 	char 			fail_file : 1;
 	char			mode[12];
 	char			data[25];
+	char			color[5];
 	nlink_t			nlinks;
 	dev_t			rdev;	
 	off_t			size;
@@ -88,7 +89,7 @@ t_info			*new_file(t_dir *dir);
 t_dir			*new_dir(t_ls *ls, const char *name);
 void			sort_lists(t_ls *ls, t_dir *dir);
 void			output_mode(t_ls *ls);
-void			output_for(t_ls *ls, t_dir **next);
+void			output_for(t_ls *ls, t_dir *dir, t_dir **next);
 void 			output_ln(t_info *file, t_ls *ls, t_dir *dir);
 void			output_just(t_dir *dir, char flag);
 

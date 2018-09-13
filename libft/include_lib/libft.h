@@ -29,6 +29,7 @@
 # define BLUE "\e[94m"
 # define PINK "\e[95m"
 # define WHITE "\e[97m"
+# define CYAN "\e[36m"
 
 # define TYPE pf->type
 # define MODF pf->modifier

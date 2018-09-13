@@ -40,9 +40,27 @@ static inline void	check_type(const unsigned int *mode, char *permfile)
 	else if (S_ISFIFO(*mode))
 		permfile[0] = 'p';
 	else if (S_ISSOCK(*mode))
-		permfile[0] = 'c';
+		permfile[0] = 's';
 	else
 		permfile[0] = '-';
+}
+
+static inline void	check_color(t_info *file)
+{
+	if (file->mode[0] == '-')
+		ft_strncpy(&file->color[0], EOC, 5);
+	else if (file->mode[0] == 'd')
+		ft_strncpy(&file->color[0], BLUE, 5);
+	else if (file->mode[0] == 'c')
+		ft_strncpy(&file->color[0], YELLOW, 5);
+	else if (file->mode[0] == 'l')
+		ft_strncpy(&file->color[0], PINK, 5);
+	else if (file->mode[0] == 'b')
+		ft_strncpy(&file->color[0], CYAN, 5);
+	else if (file->mode[0] == 'p')
+		ft_strncpy(&file->color[0], WHITE, 5);
+	else if (file->mode[0] == 's')
+		ft_strncpy(&file->color[0], GREEN, 5);
 }
 
 void				check_mode(t_info *file, unsigned int mode, char *permfile)
@@ -64,4 +82,5 @@ void				check_mode(t_info *file, unsigned int mode, char *permfile)
 	if (mode & S_ISVTX)
 		permfile[9] = (char)((mode & S_IXOTH) ? 't' : 'T');
 	check_acl_and_xattr(file, permfile);
+	check_color(file);
 }

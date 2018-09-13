@@ -32,8 +32,8 @@ void				output_ln(t_info *file, t_ls *ls, t_dir *dir)
 				dir->s_link, file->nlinks, dir->s_name, file->name_user,
 				dir->s_group, file->name_group, dir->s_size, file->size,
 				&file->data[4]);
-			if (ls->flag & FLAG_G && file->mode[0] == 'd')
-				ft_printf("{blue} %s{eoc}\n", file->name_file);
+			if (ls->flag & FLAG_G)
+				ft_printf("%s %s{eoc}\n", file->color, file->name_file);
 			else
 				ft_printf(" %s\n", file->name_file);
 		}
@@ -48,7 +48,9 @@ void				output_just(t_dir *dir, char flag)
 	tmp = (flag & FLAG_RR) ? dir->last_file : dir->head;
 	while (tmp)
 	{
-		if (!tmp->fail_file)
+		if (!tmp->fail_file && flag & FLAG_G)
+			ft_printf("%s%s{eoc}\n", tmp->color, tmp->name_file);
+		else if (!tmp->fail_file)
 			ft_printf("%s\n", tmp->name_file);
 		tmp = (flag & FLAG_RR) ? tmp->prev : tmp->next;
 	}
@@ -75,28 +77,30 @@ static inline void	output_errnfiles(t_ls *ls, t_info *file)
 		output_just(ls->files, ls->flag);
 }
 
-void				output_for(t_ls *ls, t_dir **next)
+void				output_for(t_ls *ls, t_dir *dir, t_dir **next)
 {
-	while (ls->dirs)
+	while (dir)
 	{
-		if (ls->dirs->head)
-			sort_lists(ls, ls->dirs);
+		ft_printf("===> %s\n", dir->name);
+		ft_printf("==> %d\n", (ls->flag & FLAG_RR));
+		if (dir->head)
+			sort_lists(ls, dir);
 		if (*next)
-			ft_printf("%s:\n", ls->dirs->name);
-		if (ls->dirs->close)
-			ft_printf("ls: %s: Permission denied\n", ls->dirs->name);
+			ft_printf("%s:\n", dir->name);
+		if (dir->close)
+			ft_printf("ls: %s: Permission denied\n", dir->name);
 		else if (ls->flag & FLAG_N || ls->flag & FLAG_L)
-			ft_printf("total %d\n", ls->dirs->total);
-		if (ls->dirs->head && ls->flag & FLAG_RR &&
+			ft_printf("total %d\n", dir->total);
+		if (dir->head && ls->flag & FLAG_RR &&
 			(ls->flag & FLAG_N || ls->flag & FLAG_L))
-			output_ln(ls->dirs->last_file, ls, ls->dirs);
+			output_ln(dir->last_file, ls, dir);
 		else if (ls->flag & FLAG_N || ls->flag & FLAG_L)
-			output_ln(ls->dirs->head, ls, ls->dirs);
+			output_ln(dir->head, ls, dir);
 		else
-			output_just(ls->dirs, ls->flag);
-		if (ls->dirs->next)
+			output_just(dir, ls->flag);
+		if (dir->next)
 			write(1, "\n", 1);
-		ls->dirs = (ls->flag & FLAG_RR) ? ls->dirs->prev : ls->dirs->next;
+		dir = (ls->flag & FLAG_RR) ? dir->prev : dir->next;
 	}
 }
 
@@ -106,7 +110,10 @@ void				output_mode(t_ls *ls)
 		output_errnfiles(ls, ls->files->head);
 	if (ls->files->head && ls->files->head->mode[0] != 'd' && ls->dirs)
 		write(1, "\n", 1);
-	output_for(ls, &ls->dirs->next);
+	if (ls->flag & FLAG_RR)
+		output_for(ls, ls->last_dir, &ls->last_dir->prev);
+	else
+		output_for(ls, ls->dirs, &ls->dirs->next);
 //	if (ls->flag & FLAG_R)
 //		recursion();
 }
