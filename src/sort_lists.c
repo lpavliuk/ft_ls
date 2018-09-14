@@ -12,6 +12,19 @@
 
 #include "../include/ls.h"
 
+static inline int	ft_strlen_list(t_info *list)
+{
+	int i;
+
+	i = 0;
+	while (list)
+	{
+		list = list->next;
+		++i;
+	}
+	return (i);
+}
+
 static inline void	swap_elem(t_info *a, t_info *b)
 {
 	(a->prev) ? a->prev->next = b : 0;
@@ -22,62 +35,66 @@ static inline void	swap_elem(t_info *a, t_info *b)
 	a->prev = b;
 }
 
-static inline void	sort_list_btime(t_dir *dir)
+static inline void	sort_list_btime(t_dir *dir, t_info *tmp)
 {
-	char	flag;
-	t_info	*tmp;
+	int i;
+	int j;
+	int len;
 
-	while (1)
+	i = -1;
+	len = ft_strlen_list(dir->head) - 1;
+	while (++i < len - 1)
 	{
-		flag = 1;
+		j = -1;
 		tmp = dir->head;
-		while (tmp->next)
+		while (tmp->next && ++j < len - i - 1)
 		{
 			if ((tmp->mtime < tmp->next->mtime) ||
 				((tmp->mtime == tmp->next->mtime)
 				&& (ft_strcmp(tmp->name_file, tmp->next->name_file) > 0)))
 			{
 				(&dir->head->size == &tmp->size) ? dir->head = tmp->next : 0;
+				(&dir->last_file->size == &tmp->next->size)
+				? dir->last_file = tmp : 0;
 				swap_elem(tmp, tmp->next);
-				flag = 0;
-				break ;
 			}
-			tmp = tmp->next;
+			if (tmp->next)
+				tmp = tmp->next;
 		}
-		if (flag)
-			break ;
 	}
 }
 
-static inline void	sort_list_bname(t_dir *dir)
+static inline void	sort_list_bname(t_dir *dir, t_info *tmp)
 {
-	char	flag;
-	t_info	*tmp;
+	int i;
+	int j;
+	int len;
 
-	while (1)
+	i = -1;
+	len = ft_strlen_list(dir->head) - 1;
+	while (++i < len - 1)
 	{
-		flag = 1;
+		j = -1;
 		tmp = dir->head;
-		while (tmp->next)
+		while (tmp->next && ++j < len - i - 1)
 		{
 			if (ft_strcmp(tmp->name_file, tmp->next->name_file) > 0)
 			{
 				(&dir->head->size == &tmp->size) ? dir->head = tmp->next : 0;
+				(&dir->last_file->size == &tmp->next->size)
+				? dir->last_file = tmp : 0;
 				swap_elem(tmp, tmp->next);
-				flag = 0;
-				break ;
 			}
-			tmp = tmp->next;
+			if (tmp->next)
+				tmp = tmp->next;
 		}
-		if (flag)
-			break ;
 	}
 }
 
 void				sort_lists(t_ls *ls, t_dir *dir)
 {
 	if (ls->flag & FLAG_T)
-		sort_list_btime(dir);
+		sort_list_btime(dir, dir->head);
 	else
-		sort_list_bname(dir);
+		sort_list_bname(dir, dir->head);
 }

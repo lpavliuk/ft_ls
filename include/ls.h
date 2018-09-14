@@ -81,6 +81,7 @@ typedef struct	s_ls
 }				t_ls;
 
 void 			ft_error(char *str);
+void 			check_dir(t_ls *ls, t_info *file);
 void 			recursion(t_ls *ls, t_dir *dir);
 void			check_mode(t_info *file, unsigned int mode, char *permfile);
 void			check_flags(t_ls *ls, char **argv, int *i);
