@@ -43,11 +43,11 @@ static inline void	sort_list_btime(t_dir *dir, t_info *tmp)
 
 	i = -1;
 	len = ft_strlen_list(dir->head) - 1;
-	while (++i < len - 1)
+	while (++i < len)
 	{
 		j = -1;
 		tmp = dir->head;
-		while (tmp->next && ++j < len - i - 1)
+		while (tmp->next && ++j < len)
 		{
 			if ((tmp->mtime < tmp->next->mtime) ||
 				((tmp->mtime == tmp->next->mtime)
@@ -72,11 +72,11 @@ static inline void	sort_list_bname(t_dir *dir, t_info *tmp)
 
 	i = -1;
 	len = ft_strlen_list(dir->head) - 1;
-	while (++i < len - 1)
+	while (++i < len)
 	{
 		j = -1;
 		tmp = dir->head;
-		while (tmp->next && ++j < len - i - 1)
+		while (tmp->next && ++j < len)
 		{
 			if (ft_strcmp(tmp->name_file, tmp->next->name_file) > 0)
 			{

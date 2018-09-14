@@ -12,13 +12,8 @@
 
 #include "../include/ls.h"
 
-static inline void 	info_dir(t_ls *ls, t_dir *direct)
+static inline void	work_with_dir(t_ls *ls, t_dir *direct)
 {
-	t_info	*file;
-	t_dir	*dir;
-
-	if (&ls->dirs->name != &direct->name)
-		ft_printf("%s:\n", direct->name);
 	if (direct->head)
 		sort_lists(ls, direct);
 	if (direct->close)
@@ -32,6 +27,16 @@ static inline void 	info_dir(t_ls *ls, t_dir *direct)
 		output_ln(direct->head, ls, direct);
 	else
 		output_just(direct, ls->flag);
+}
+
+static inline void	info_dir(t_ls *ls, t_dir *direct)
+{
+	t_info	*file;
+	t_dir	*dir;
+
+	if (&ls->dirs->name != &direct->name)
+		ft_printf("%s:\n", direct->name);
+	work_with_dir(ls, direct);
 	file = (ls->flag & FLAG_RR) ? direct->last_file : direct->head;
 	while (file)
 	{
@@ -47,7 +52,7 @@ static inline void 	info_dir(t_ls *ls, t_dir *direct)
 	}
 }
 
-void 				recursion(t_ls *ls, t_dir *dir)
+void				recursion(t_ls *ls, t_dir *dir)
 {
 	t_dir *last;
 
@@ -56,7 +61,7 @@ void 				recursion(t_ls *ls, t_dir *dir)
 	{
 		info_dir(ls, dir);
 		if (&last->name == &dir->name)
-			break;
+			break ;
 		write(1, "\n", 1);
 		dir = dir->next;
 	}

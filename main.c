@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <zconf.h>
 #include "include/ls.h"
 
 /**************** CHECK LS->HEAD **********************/
@@ -100,12 +99,10 @@ int		main(int argc, char **argv)
 		sort_lists(ls, ls->files);
 		check_dir(ls, ls->files->head);
 	}
+	else if (ls->flag & FLAG_D)
+		read_info(ls, ".");
 	else
 		read_dir_info(ls, ".");
-
-//	check_ls(ls);
-//	ft_printf("---------------------------------------\n");
-
 	output_mode(ls);
 
 //	system("leaks a.out");
