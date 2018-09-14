@@ -32,18 +32,18 @@
 # define FLAG_G 0x40
 # define FLAG_D 0x80
 
-typedef struct	s_info
+typedef struct		s_info
 {
 	char			*name_file;
-	char 			*pwd;
-	char 			*name_group;
-	char 			*name_user;
-	char 			fail_file : 1;
+	char			*pwd;
+	char			*name_group;
+	char			*name_user;
+	char			fail_file : 1;
 	char			mode[12];
 	char			data[25];
 	char			color[5];
 	nlink_t			nlinks;
-	dev_t			rdev;	
+	dev_t			rdev;
 	off_t			size;
 	uid_t			uid;
 	gid_t			gid;
@@ -52,49 +52,48 @@ typedef struct	s_info
 	struct group	*group;
 	struct s_info	*next;
 	struct s_info	*prev;
-}				t_info;
+}					t_info;
 
-typedef struct	s_dir
+typedef struct		s_dir
 {
-	char 			*name;
-	char 			close : 1;
+	char			*name;
+	char			close : 1;
 	size_t			total;
 	t_info			*head;
 	t_info			*last_file;
-	size_t 			s_name;
-	size_t 			s_group;
+	size_t			s_name;
+	size_t			s_group;
 	size_t			s_size;
 	size_t			s_link;
 	struct s_dir	*next;
 	struct s_dir	*prev;
-}				t_dir;
+}					t_dir;
 
-typedef struct	s_ls
+typedef struct		s_ls
 {
 	DIR				*fd_dir;
 	struct dirent	*file;
 	struct stat		stat;
-	unsigned char 	flag;
+	unsigned char	flag;
 	t_dir			*files;
 	t_dir			*dirs;
 	t_dir			*last_dir;
-}				t_ls;
+}					t_ls;
 
-void 			ft_error(char *str);
-void 			check_dir(t_ls *ls, t_info *file);
-void 			recursion(t_ls *ls, t_dir *dir);
-void			check_mode(t_info *file, unsigned int mode, char *permfile);
-void			check_flags(t_ls *ls, char **argv, int *i);
-char			*ft_strjoin_dir(char const *s1, char const *s2);
-void			read_info(t_ls *ls, char *argv);
-void			read_dir_info(t_ls *ls, const char *dir_name);
-t_info			*new_file(t_dir *dir);
-t_dir			*new_dir(t_ls *ls, const char *name);
-void			sort_lists(t_ls *ls, t_dir *dir);
-void			output_mode(t_ls *ls);
-void			output_for(t_ls *ls, t_dir *dir, t_dir **next);
-void 			output_ln(t_info *file, t_ls *ls, t_dir *dir);
-void			output_just(t_dir *dir, char flag);
+void				ft_error(char *str);
+void				check_dir(t_ls *ls, t_info *file);
+void				recursion(t_ls *ls, t_dir *dir);
+void				check_mode(t_info *file, unsigned int mode, char *permfile);
+void				check_flags(t_ls *ls, char **argv, int *i);
+char				*ft_strjoin_dir(char const *s1, char const *s2);
+void				read_info(t_ls *ls, char *argv);
+void				read_dir_info(t_ls *ls, const char *dir_name);
+t_info				*new_file(t_dir *dir);
+t_dir				*new_dir(t_ls *ls, const char *name);
+void				sort_lists(t_ls *ls, t_dir *dir);
+void				output_mode(t_ls *ls);
+void				output_for(t_ls *ls, t_dir *dir, t_dir **next);
+void				output_ln(t_info *file, t_ls *ls, t_dir *dir);
+void				output_just(t_dir *dir, char flag);
 
-void	check_ls(t_ls *ls);
 #endif
