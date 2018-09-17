@@ -17,7 +17,7 @@ static inline void	ft_usage(const char flag)
 	write(2, "ls: illegal option -- ", 22);
 	write(2, &flag, 1);
 	write(2, "\nusage: ls [-laRrtnGd] [file ...]\n", 34);
-	exit(0);
+	exit(1);
 }
 
 void				check_flags(t_ls *ls, char **argv, int *i)

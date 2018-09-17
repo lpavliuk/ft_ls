@@ -78,7 +78,7 @@ void				check_mode(t_info *file, unsigned int mode, char *permfile)
 	if (mode & S_ISUID)
 		permfile[3] = (char)((mode & S_IXUSR) ? 's' : 'S');
 	if (mode & S_ISGID)
-		permfile[6] = (char)((mode & S_IXGRP) ? 's' : 'l');
+		permfile[6] = (char)((mode & S_IXGRP) ? 's' : 'S');
 	if (mode & S_ISVTX)
 		permfile[9] = (char)((mode & S_IXOTH) ? 't' : 'T');
 	check_acl_and_xattr(file, permfile);
