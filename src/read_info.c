@@ -38,7 +38,10 @@ static inline void	find_link(t_info *file)
 
 	buf = malloc(PATH_MAX);
 	ft_bzero(buf, PATH_MAX);
-	size = readlink(file->name_file, buf, PATH_MAX);
+	if (file->pwd)
+		size = readlink(file->pwd, buf, PATH_MAX);
+	else
+		size = readlink(file->name_file, buf, PATH_MAX);
 	buf[size] = '\0';
 	tmp = file->name_file;
 	file->name_file = ft_strjoin(file->name_file, " -> ");

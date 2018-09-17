@@ -41,9 +41,9 @@ LIB=libft/libft.a
 SRC_DIR=src
 HEADER=include/ls.h
 
-all: $(NAME)
+all: lib $(NAME)
 
-$(NAME):  lib $(OBJ) $(HEADER)
+$(NAME): $(OBJ) $(HEADER)
 	@ $(CC) $(CFLAGS) $(OBJ) $(LIB) -o $(NAME) -I $(INCLUDE) -I $(INCLUDE_LIB)
 	@ printf "|---------------------------------|\n ✅ | $(WHITE)[$(GREEN)done$(WHITE)]$(COLOR_OFF) - ft_ls\n|---------------------------------|\n"
 
