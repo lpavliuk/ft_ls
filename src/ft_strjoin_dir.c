@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ls.h"
+#include <ls.h>
 
 char	*ft_strjoin_dir(char const *s1, char const *s2)
 {

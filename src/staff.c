@@ -10,13 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ls.h"
+#include <ls.h>
 
-void	ft_error(char *str)
+void	ft_error(char *str, char denied)
 {
 	write(2, "ft_ls: ", 7);
 	write(2, str, ft_strlen(str));
-	write(2, ": Permission denied\n", 20);
+	if (denied)
+		write(2, ": Permission denied\n", 20);
+	else
+		write(2, ": No such file or directory\n", 28);
 }
 
 void	check_dir(t_ls *ls, t_info *file)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ls.h"
+#include <ls.h>
 
 static inline void	ft_usage(const char flag)
 {

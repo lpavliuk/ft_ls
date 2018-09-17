@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ls.h"
+#include <ls.h>
 
 static inline void	work_with_dir(t_ls *ls, t_dir *direct)
 {
 	if (direct->head)
 		sort_lists(ls, direct);
 	if (direct->close)
-		ft_error(direct->name);
+		ft_error(direct->name, 1);
 	else if ((ls->flag & FLAG_N || ls->flag & FLAG_L) && direct->head)
 		ft_printf("total %d\n", direct->total);
 	if (direct->head && ls->flag & FLAG_RR &&

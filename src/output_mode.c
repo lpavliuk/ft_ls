@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ls.h"
+#include <ls.h>
 
 void				output_ln(t_info *file, t_ls *ls, t_dir *dir)
 {
@@ -64,7 +64,7 @@ static inline void	output_errnfiles(t_ls *ls, t_info *file, int *files)
 	while (tmp)
 	{
 		if (tmp->fail_file)
-			ft_printf("ft_ls: %s: No such file or directory\n", tmp->name_file);
+			ft_error(tmp->name_file, 0);
 		else if (tmp->mode[0] == 'd' && !(ls->flag & FLAG_D))
 			tmp->fail_file = 1;
 		else
@@ -88,7 +88,7 @@ void				output_for(t_ls *ls, t_dir *dir, t_dir **next)
 		if (*next)
 			ft_printf("%s:\n", dir->name);
 		if (dir->close)
-			ft_error(dir->name);
+			ft_error(dir->name, 1);
 		else if (ls->flag & FLAG_N || ls->flag & FLAG_L)
 			ft_printf("total %d\n", dir->total);
 		if (dir->head && ls->flag & FLAG_RR &&

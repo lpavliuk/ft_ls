@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ls.h"
+#include <ls.h>
 
 static inline void	check_acl_and_xattr(t_info *file, char *permfile)
 {
