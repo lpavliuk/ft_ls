@@ -14,8 +14,9 @@
 
 static inline void	ft_usage(const char flag)
 {
-	ft_printf("ls: illegal option -- %c\n", flag);
-	ft_putstr("usage: ls [-laRrtnGd] [file ...]\n");
+	write(2, "ls: illegal option -- ", 22);
+	write(2, &flag, 1);
+	write(2, "\nusage: ls [-laRrtnGd] [file ...]\n", 34);
 	exit(0);
 }
 
