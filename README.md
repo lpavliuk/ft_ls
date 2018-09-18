@@ -2,6 +2,8 @@
 
 This is a recode an original command ls and some of its options using C.
 
+Project of __UNIT Factory__ (école 42).
+
 __----------------------------------------------------------------------------------------------------------------__
 
 __man ls__
