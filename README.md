@@ -18,3 +18,6 @@ along with any other information you ask for with the flags. If you
 do not specify a File or Directory parameter, the ls command displays
 the contents of the current directory.
 
+
+
+![image](https://github.com/lpavliuk/ls/blob/master/screenshots/Screen%20Shot%202018-09-18%20at%202.52.41%20PM.png)
